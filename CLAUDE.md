@@ -23,9 +23,9 @@ The project uses **npm** as the package manager by default.
 ```
 app/
   app.vue          # Root Vue component (entry point)
-  
+
 public/            # Static assets served as-is (favicon, robots.txt)
-  
+
 nuxt.config.ts     # Nuxt configuration (env, modules, devtools, etc.)
 
 tsconfig.json      # TypeScript config (references auto-generated .nuxt/ configs)
@@ -46,6 +46,7 @@ These are regenerated on `npm install` and `npm run build`. Do not edit them.
 ### Vue Components & Auto-Imports
 
 Nuxt auto-discovers and imports:
+
 - **Components** from `app/components/**/*.vue` → use as `<ComponentName />` without imports
 - **Composables** from `app/composables/**/*.ts` → use as `useComposableName()` without imports
 - **Utils** from `app/utils/**/*.ts` → auto-imported functions
@@ -55,6 +56,7 @@ Type definitions are auto-generated in `.nuxt/components.d.ts` and `.nuxt/import
 ### Routing
 
 Nuxt uses **file-based routing**. Create pages in `app/pages/` and they become routes:
+
 - `app/pages/index.vue` → `/`
 - `app/pages/about.vue` → `/about`
 - `app/pages/[id].vue` → `/dynamic-route/:id`
@@ -64,6 +66,7 @@ No explicit router setup needed—Vue Router is auto-configured by Nuxt.
 ### TypeScript Setup
 
 TypeScript is pre-configured. The `tsconfig.json` references auto-generated configs in `.nuxt/`:
+
 - `.nuxt/tsconfig.app.json` — App-side types
 - `.nuxt/tsconfig.server.json` — Server-side (Nitro) types
 - `.nuxt/tsconfig.shared.json` — Shared types
@@ -82,6 +85,7 @@ Types are generated on `npm install` and updated by `nuxt prepare`.
 ## Key Configuration
 
 **nuxt.config.ts** is minimal. Common patterns to add:
+
 - `modules` — Install Nuxt modules (UI libraries, auth, etc.)
 - `routeRules` — Cache & prerender control for hybrid rendering
 - `ssr` — Toggle SSR on/off (default: true)
@@ -92,6 +96,7 @@ See [nuxt.com/docs/api/configuration/nuxt-config](https://nuxt.com/docs/api/conf
 ## Server Routes & Nitro
 
 Nuxt uses **Nitro** as the backend. Create API endpoints in `app/server/routes/` or `app/server/api/`:
+
 - `app/server/api/users.get.ts` → `GET /api/users`
 - `app/server/middleware/` — Server middleware
 - `app/server/utils/` — Server-side utilities
@@ -101,6 +106,7 @@ Nitro runs in production and dev server (no separate backend needed for basic AP
 ## Environment Variables
 
 Create `.env` file in the root:
+
 ```
 NUXT_PUBLIC_API_BASE=http://localhost:3000  # Public vars prefixed with NUXT_PUBLIC_
 NUXT_SECRET_KEY=...                          # Private server-only vars
@@ -122,9 +128,74 @@ Access in components with `process.env.NUXT_PUBLIC_*` or use `useRuntimeConfig()
 - **Module not found?** → Run `npm install`, check tsconfig error in `.nuxt/`
 - **Page not routing?** → Ensure file is in `app/pages/` with `.vue` extension
 
+## Laravel Sanctum Integration
+
+This project is pre-configured to work with Laravel Sanctum authentication via `http://localhost`.
+
+### Setup
+
+1. Create `.env` file with:
+
+```
+NUXT_PUBLIC_API_BASE=http://localhost
+```
+
+2. Ensure your Laravel API is running and has Sanctum enabled:
+
+```bash
+# Laravel backend
+php artisan serve --port=8000
+```
+
+### How It Works
+
+- **useAuth()** — Login, register, logout, get current user
+- **useApi()** — Make authenticated requests to `/api/*` endpoints (auto-includes Bearer token)
+- **useTransactions()** — Example CRUD composable for transactions (pattern for other entities)
+- **auth middleware** — Protects pages, redirects to `/login` if not authenticated
+
+### Creating New API Composables
+
+Follow the `useTransactions()` pattern. Example for accounts:
+
+```typescript
+// app/composables/useAccounts.ts
+export const useAccounts = () => {
+  const { get, post, put, del } = useApi();
+
+  const accounts = ref<any[]>([]);
+  const fetchAccounts = async () => {
+    const data = await get('/accounts');
+    accounts.value = data.data || data;
+  };
+
+  return { accounts, fetchAccounts /* ... */ };
+};
+```
+
+Then use in pages: `const { accounts, fetchAccounts } = useAccounts()`
+
+### Token Storage
+
+- Token stored in `localStorage` as `auth_token`
+- Automatically sent as `Authorization: Bearer <token>` header on all requests
+- 401 response auto-clears token and redirects to `/login`
+
+### API Response Format
+
+Expected Laravel responses:
+
+- **Login/Register:** `{ token: "...", user: {...} }`
+- **GET /api/resource:** `{ data: [...] }` or `[...]`
+- **POST/PUT/PATCH:** `{ data: {...} }` or `{...}`
+- **DELETE:** any response
+
+Adapters in composables handle both formats.
+
 ## Next Steps to Extend This Project
 
 - Add UI framework: `npm install @nuxt/ui` and configure in `nuxt.config.ts`
-- Add state management: use `useState()` (Nuxt composable) or install Pinia
-- Add database: create server routes in `app/server/api/` and connect to your finance API
-- Style: add `app.css` and import in `app.vue`, or use Tailwind via `@nuxtjs/tailwindcss`
+- Add more composables for other API entities (accounts, categories, budgets, etc.)
+- Add charts/analytics: install `chart.js` or `plotly.js` for financial dashboards
+- Add validation: use `vee-validate` + `zod` for form validation
+- Customize styles: create `app.css` or use Tailwind via `@nuxtjs/tailwindcss`

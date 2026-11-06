@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-surface: #f4f5f2;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #f0f2f0;
+  --color-line: #e2e6e3;
+  --color-control-border: #8c9792;
+  --color-ink: #0f1a17;
+  --color-ink-soft: #3f4a45;
+  --color-ink-muted: #5b6661;
+  --color-sidebar: #0f1a17;
+  --color-sidebar-active: #1f2e29;
+  --color-sidebar-ink: #b9c4bf;
+  --color-brand: #0b7a5c;
+  --color-brand-strong: #08513d;
+  --color-on-brand: #ffffff;
+  --color-brand-soft: #e3f2ec;
+  --color-link: #0b6b51;
+  --color-income: #0b7a5c;
+  --color-expense: #b4470f;
+  --color-expense-chart: #f0a577;
+  --color-warning: #8a4e00;
+  --color-warning-soft: #fdf0e3;
+  --color-danger: #9a3b0c;
+  --color-focus-ring: #0b7a5c;
+}
+
+/* Finannce — gerado de tokens.json. Fonte: Manrope (Google Fonts, 400–800). */
+:root {
+  --surface: #f4f5f2;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f0f2f0;
+  --line: #e2e6e3;
+  --control-border: #8c9792;
+  --ink: #0f1a17;
+  --ink-soft: #3f4a45;
+  --ink-muted: #5b6661;
+  --sidebar: #0f1a17;
+  --sidebar-active: #1f2e29;
+  --sidebar-ink: #b9c4bf;
+  --brand: #0b7a5c;
+  --brand-strong: #08513d;
+  --on-brand: #ffffff;
+  --brand-soft: #e3f2ec;
+  --link: #0b6b51;
+  --income: #0b7a5c;
+  --expense: #b4470f;
+  --expense-chart: #f0a577;
+  --warning: #8a4e00;
+  --warning-soft: #fdf0e3;
+  --danger: #9a3b0c;
+  --focus-ring: #0b7a5c;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+  --shadow-selected: 0 1px 3px rgba(15, 26, 23, 0.15);
+  --shadow-modal: 0 24px 48px rgba(15, 26, 23, 0.24);
+  --control-height: 44px;
+  --sidebar-width: 240px;
+  --font-sans: Manrope, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* Tema escuro: siga o sistema, e permita forçar com data-theme
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --surface: #0d1412;
+    --surface-raised: #16201d;
+    --surface-sunken: #1c2825;
+    --line: #2a3833;
+    --control-border: #5e6b66;
+    --ink: #e9efec;
+    --ink-soft: #bcc7c2;
+    --ink-muted: #98a49f;
+    --sidebar: #0a100e;
+    --sidebar-active: #1a2622;
+    --sidebar-ink: #a9b5b0;
+    --brand: #34c79a;
+    --brand-strong: #6fe0bc;
+    --on-brand: #062a20;
+    --brand-soft: #0f2f25;
+    --link: #5ed5ae;
+    --income: #4fd1a5;
+    --expense: #f59e62;
+    --expense-chart: #c76a35;
+    --warning: #f2b55c;
+    --warning-soft: #3a2710;
+    --danger: #f08a5d;
+    --focus-ring: #6fe0bc;
+    color-scheme: dark;
+  }
+} */
+:root[data-theme='dark'] {
+  --surface: #0d1412;
+  --surface-raised: #16201d;
+  --surface-sunken: #1c2825;
+  --line: #2a3833;
+  --control-border: #5e6b66;
+  --ink: #e9efec;
+  --ink-soft: #bcc7c2;
+  --ink-muted: #98a49f;
+  --sidebar: #0a100e;
+  --sidebar-active: #1a2622;
+  --sidebar-ink: #a9b5b0;
+  --brand: #34c79a;
+  --brand-strong: #6fe0bc;
+  --on-brand: #062a20;
+  --brand-soft: #0f2f25;
+  --link: #5ed5ae;
+  --income: #4fd1a5;
+  --expense: #f59e62;
+  --expense-chart: #c76a35;
+  --warning: #f2b55c;
+  --warning-soft: #3a2710;
+  --danger: #f08a5d;
+  --focus-ring: #6fe0bc;
+  color-scheme: dark;
+}
