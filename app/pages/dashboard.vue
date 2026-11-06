@@ -1,170 +1,154 @@
 <template>
   <AppShell>
-    <TransactionFormModal
-      :is-open="showTransactionModal"
-      :mode="transactionMode"
-      :accounts="[]"
-      :categories="[]"
-      @close="showTransactionModal = false"
-      @submit="handleTransactionSubmit"
-    />
+    <!-- Header -->
+    <header class="flex flex-wrap justify-between items-center gap-4 mb-6">
+      <div class="flex flex-col gap-1">
+        <span class="text-sm text-ink-muted font-semibold">{{ dateLabel }}</span>
+        <h1 class="text-3xl font-bold text-ink m-0">Olá, {{ user?.name }}</h1>
+      </div>
+      <div class="flex flex-wrap gap-2.5 items-center">
+        <button
+          @click="openTransactionModal"
+          class="flex items-center gap-2 min-h-11 px-4.5 rounded-[10px] bg-brand text-on-brand font-bold text-sm transition-all hover:bg-brand-strong"
+        >
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
+            <path d="M12 5v14" />
+            <path d="M5 12h14" />
+          </svg>
+          Nova transação
+        </button>
+      </div>
+    </header>
 
-    <div class="flex flex-col gap-6">
-      <h1 class="text-3xl font-bold text-ink m-0">Visão Geral</h1>
+    <!-- KPI Cards -->
+    <section class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 mb-6">
+      <div class="bg-sidebar text-white rounded-2xl p-5.5 flex flex-col gap-2.5">
+        <span class="text-xs font-semibold text-sidebar-ink">Saldo em contas</span>
+        <span class="text-3xl font-bold">{{ formatAmount(balanceTotal) }}</span>
+        <span class="text-xs text-sidebar-ink font-semibold">3 contas ativas</span>
+      </div>
+      <div class="bg-surface-raised border border-line rounded-2xl p-5.5 flex flex-col gap-2.5">
+        <span class="text-xs font-semibold text-ink-muted">Receitas do mês</span>
+        <span class="text-2xl font-bold text-income">{{ formatAmount(totalIncome) }}</span>
+        <span class="text-xs text-ink-muted">{{ incomeCount }} lançamentos</span>
+      </div>
+      <div class="bg-surface-raised border border-line rounded-2xl p-5.5 flex flex-col gap-2.5">
+        <span class="text-xs font-semibold text-ink-muted">Despesas do mês</span>
+        <span class="text-2xl font-bold text-expense">{{ formatAmount(totalExpense) }}</span>
+        <span class="text-xs text-ink-muted">{{ expenseCount }} lançamentos</span>
+      </div>
+      <div class="bg-surface-raised border border-line rounded-2xl p-5.5 flex flex-col gap-2.5">
+        <span class="text-xs font-semibold text-ink-muted">Em aberto</span>
+        <span class="text-2xl font-bold text-warning">{{ formatAmount(totalPending) }}</span>
+        <span class="text-xs text-ink-muted">{{ pendingCount }} transações</span>
+      </div>
+    </section>
 
-      <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5">
-        <div class="bg-surface-raised border border-line rounded-lg p-6 flex flex-col gap-4">
-          <h2 class="text-lg font-semibold text-ink m-0 mb-4">Ações Rápidas</h2>
-          <div class="flex flex-col gap-3">
-            <button @click="openTransactionModal('income')" class="p-3 px-4 rounded-md font-medium cursor-pointer font-sans text-white transition-all bg-income hover:bg-brand">
-              + Receita
-            </button>
-            <button @click="openTransactionModal('expense')" class="p-3 px-4 rounded-md font-medium cursor-pointer font-sans text-white transition-all bg-expense hover:bg-danger">
-              − Despesa
-            </button>
-            <button @click="openTransactionModal('transfer')" class="p-3 px-4 rounded-md font-medium cursor-pointer font-sans text-white transition-all bg-brand hover:bg-brand-strong">
-              ↔ Transferência
-            </button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Resumo</h2>
-          <div class="summary">
-            <div class="item">
-              <span class="label">Total de Receitas:</span>
-              <span class="value income">{{ formatAmount(totalIncome) }}</span>
-            </div>
-            <div class="item">
-              <span class="label">Total de Despesas:</span>
-              <span class="value expense">{{ formatAmount(totalExpense) }}</span>
-            </div>
-            <div class="item divider">
-              <span class="label">Saldo:</span>
-              <span class="value" :class="balance >= 0 ? 'income' : 'expense'">
-                {{ formatAmount(balance) }}
-              </span>
-            </div>
-          </div>
-        </div>
+    <!-- Transactions -->
+    <section class="bg-surface-raised border border-line rounded-2xl p-5.5">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-ink m-0">Transações recentes</h2>
+        <NuxtLink to="/transactions" class="text-xs font-bold text-link">Ver todas</NuxtLink>
       </div>
 
-      <div class="card">
-        <h2>Transações Recentes</h2>
+      <div v-if="transactions.length === 0" class="text-center py-8 text-ink-muted">Nenhuma transação</div>
 
-        <div v-if="loading" class="empty">Carregando...</div>
-
-        <div v-else-if="transactions.length === 0" class="empty">
-          Nenhuma transação ainda
-        </div>
-
-        <div v-else class="table-wrapper">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Tipo</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="transaction in transactions" :key="transaction.id">
-                <td>{{ formatDate(transaction.created_at) }}</td>
-                <td>{{ transaction.description }}</td>
-                <td class="text-right font-semibold" :class="`type-${transaction.type}`">
-                  {{ formatAmount(transaction.amount, transaction.type) }}
-                </td>
-                <td :class="`type-${transaction.type}`">
-                  {{ transaction.type === 'income' ? 'Receita' : 'Despesa' }}
-                </td>
-                <td>
-                  <button
-                    @click="deleteTransaction(transaction.id)"
-                    :disabled="deletingId === transaction.id"
-                    class="btn-delete"
-                  >
-                    {{ deletingId === transaction.id ? '...' : 'Remover' }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div v-else class="space-y-1">
+        <div
+          v-for="tx in transactions.slice(0, 5)"
+          :key="tx.id"
+          class="flex justify-between items-center py-3 border-b border-line last:border-0"
+        >
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-semibold text-ink">{{ tx.description }}</span>
+            <span class="text-xs text-ink-muted">{{ formatDate(tx.created_at) }}</span>
+          </div>
+          <span :class="['text-sm font-bold', tx.type === 'income' ? 'text-income' : 'text-expense']">
+            {{ tx.type === 'income' ? '+' : '−' }} {{ formatAmount(tx.amount) }}
+          </span>
         </div>
       </div>
-    </div>
+    </section>
   </AppShell>
+
+  <TransactionFormModal
+    :is-open="showTransactionModal"
+    :mode="transactionMode"
+    @close="showTransactionModal = false"
+    @submit="handleTransactionSubmit"
+  />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
   middleware: 'auth',
-})
+});
 
-const { transactions, loading, fetchTransactions, deleteTransaction: deleteTransactionApi } = useTransactions()
+const { user } = useAuth();
+const { transactions, fetchTransactions } = useTransactions();
 
-const showTransactionModal = ref(false)
-const transactionMode = ref<'income' | 'expense' | 'transfer'>('expense')
-const deletingId = ref<number | null>(null)
+const showTransactionModal = ref(false);
+const transactionMode = ref<'income' | 'expense' | 'transfer'>('expense');
+
+const dateLabel = computed(() => {
+  const now = new Date();
+  const day = now.toLocaleDateString('pt-BR', { weekday: 'long' });
+  const date = now.toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' });
+  return `${day}, ${date}`;
+});
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('pt-BR')
-}
+  return new Date(date).toLocaleDateString('pt-BR');
+};
 
-const formatAmount = (amount: number, type?: string) => {
-  const formatter = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  })
-  const prefix = type ? (type === 'income' ? '+ ' : '− ') : ''
-  return prefix + formatter.format(Math.abs(amount) / 100)
-}
+const formatAmount = (amount: number) => {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount / 100);
+};
+
+const balanceTotal = computed(() => {
+  return transactions.value.reduce((sum, t) => {
+    return sum + (t.type === 'income' ? t.amount : -t.amount);
+  }, 0);
+});
 
 const totalIncome = computed(() => {
-  return transactions.value
-    .filter(t => t.type === 'income')
-    .reduce((sum, t) => sum + (t.amount || 0), 0)
-})
+  return transactions.value.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+});
 
 const totalExpense = computed(() => {
-  return transactions.value
-    .filter(t => t.type === 'expense')
-    .reduce((sum, t) => sum + (t.amount || 0), 0)
-})
+  return transactions.value.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+});
 
-const balance = computed(() => totalIncome.value - totalExpense.value)
+const totalPending = computed(() => {
+  return transactions.value.filter((t) => !t.is_paid).reduce((sum, t) => sum + t.amount, 0);
+});
 
-const openTransactionModal = (mode: 'income' | 'expense' | 'transfer') => {
-  transactionMode.value = mode
-  showTransactionModal.value = true
-}
+const incomeCount = computed(() => transactions.value.filter((t) => t.type === 'income').length);
+const expenseCount = computed(() => transactions.value.filter((t) => t.type === 'expense').length);
+const pendingCount = computed(() => transactions.value.filter((t) => !t.is_paid).length);
 
-const handleTransactionSubmit = async (data: any) => {
+const openTransactionModal = () => {
+  transactionMode.value = 'expense';
+  showTransactionModal.value = true;
+};
+
+const handleTransactionSubmit = async () => {
   try {
-    // TODO: implement modal transaction submission
-    showTransactionModal.value = false
-    await fetchTransactions()
+    showTransactionModal.value = false;
+    await fetchTransactions();
   } catch (error) {
-    alert('Erro ao criar transação')
+    console.error('Erro ao criar transação', error);
   }
-}
-
-const deleteTransaction = async (id: number) => {
-  if (!confirm('Tem certeza que deseja remover?')) return
-
-  deletingId.value = id
-  try {
-    await deleteTransactionApi(id)
-  } catch (error) {
-    alert('Erro ao remover transação')
-  } finally {
-    deletingId.value = null
-  }
-}
+};
 
 onMounted(() => {
-  fetchTransactions()
-})
+  fetchTransactions();
+});
 </script>
-

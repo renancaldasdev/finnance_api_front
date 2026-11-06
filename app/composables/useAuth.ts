@@ -10,6 +10,15 @@ export const useAuth = () => {
     if (stored) {
       token.value = stored;
     }
+
+    const storedUser = localStorage.getItem('auth_user');
+    if (storedUser) {
+      try {
+        user.value = JSON.parse(storedUser);
+      } catch (error) {
+        console.error('Erro ao restaurar usuário:', error);
+      }
+    }
   };
 
   const login = async (email: string, password: string) => {
@@ -19,6 +28,7 @@ export const useAuth = () => {
       token.value = data.token;
       user.value = data;
       localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('auth_user', JSON.stringify(data));
       await router.push('/dashboard');
       return data;
     } catch (error) {
@@ -33,6 +43,7 @@ export const useAuth = () => {
       token.value = data.token;
       user.value = data;
       localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('auth_user', JSON.stringify(data));
       await router.push('/dashboard');
       return data;
     } catch (error) {
@@ -50,6 +61,7 @@ export const useAuth = () => {
       token.value = null;
       user.value = null;
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
       await router.push('/');
     }
   };
