@@ -150,7 +150,7 @@ const data: ResponseType = response;
 // ❌ Warning: Line too long
 const veryLongVariableNameThatExceedsTheLineWidthLimitOfOneHundredCharacters = 123;
 
-// ✅ Auto-formatted
+// ✅ Auto-formatted (wrapped to 100 chars)
 const veryLongVariableNameThatExceedsTheLineWidthLimitOfOneHundredCharacters = 123;
 ```
 

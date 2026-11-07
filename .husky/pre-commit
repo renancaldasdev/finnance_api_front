@@ -4,18 +4,23 @@
 # Quality checks before commit
 echo "🔍 Running code quality checks..."
 
-# Format code
-npm run format
+# Format code and fix linting in parallel
+npm run format &
+npm run lint:fix &
+wait
 
-# Fix linting issues
-npm run lint:fix
-
-# Run tests
+# Run tests (after format+lint complete)
 npm run test
+TEST_RESULT=$?
 
-# Check if there are still issues after fixes
+# Check if there are still linting errors
 if npm run lint 2>&1 | grep -E "error"; then
   echo "❌ Linting errors found. Please fix them manually."
+  exit 1
+fi
+
+if [ $TEST_RESULT -ne 0 ]; then
+  echo "❌ Tests failed. Please fix them before committing."
   exit 1
 fi
 

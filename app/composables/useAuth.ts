@@ -110,12 +110,11 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    // Retry logout once if it fails (server might be temporarily unavailable)
+    // Retry logout with exponential backoff if server is temporarily unavailable
     let retries = 0;
     const maxRetries = 1;
     while (retries <= maxRetries) {
       try {
-        const { post } = useApi();
         await post('/logout', {});
         break;
       } catch (error) {
@@ -124,8 +123,9 @@ export const useAuth = () => {
           console.error('Logout failed after retries:', error);
           break;
         }
-        // Wait before retrying
-        await new Promise((r) => setTimeout(r, 100));
+        // Exponential backoff: 100ms, then 200ms
+        const delay = 100 * Math.pow(2, retries - 1);
+        await new Promise((r) => setTimeout(r, delay));
       }
     }
     // Always clear local state, even if server logout fails

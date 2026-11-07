@@ -14,11 +14,7 @@
   },
   "hooks": {
     "postToolUse": {
-      "Edit": [
-        "npx prettier --write {file}",
-        "npx eslint --fix {file} 2>/dev/null || true",
-        "npx tsc --noEmit"
-      ]
+      "Edit": ["npx prettier --write {file}", "npx tsc --noEmit"]
     },
     "preToolUse": {
       "Edit": [
