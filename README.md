@@ -149,9 +149,9 @@ A aplicação utiliza um design system completo com:
 ### Cores Principais
 
 ```css
---sidebar: #0f1a17 /* Sidebar escura */ --brand: #0b7a5c /* Cor primária (verde teal) */ --income: #0b7a5c
-  /* Receitas */ --expense: #b4470f /* Despesas */ --danger: #9a3b0c /* Ações destrutivas */ --warning: #8a4e00
-  /* Avisos */;
+--sidebar: #0f1a17 /* Sidebar escura */ --brand: #0b7a5c /* Cor primária (verde teal) */
+  --income: #0b7a5c /* Receitas */ --expense: #b4470f /* Despesas */ --danger: #9a3b0c
+  /* Ações destrutivas */ --warning: #8a4e00 /* Avisos */;
 ```
 
 ## 📦 Composables API

@@ -62,7 +62,9 @@
         <NuxtLink to="/transactions" class="text-xs font-bold text-link">Ver todas</NuxtLink>
       </div>
 
-      <div v-if="transactions.length === 0" class="text-center py-8 text-ink-muted">Nenhuma transação</div>
+      <div v-if="transactions.length === 0" class="text-center py-8 text-ink-muted">
+        Nenhuma transação
+      </div>
 
       <div v-else class="space-y-1">
         <div
@@ -74,7 +76,9 @@
             <span class="text-sm font-semibold text-ink">{{ tx.description }}</span>
             <span class="text-xs text-ink-muted">{{ formatDate(tx.date) }}</span>
           </div>
-          <span :class="['text-sm font-bold', tx.type === 'income' ? 'text-income' : 'text-expense']">
+          <span
+            :class="['text-sm font-bold', tx.type === 'income' ? 'text-income' : 'text-expense']"
+          >
             {{ tx.type === 'income' ? '+' : '−' }} {{ formatAmount(tx.amount) }}
           </span>
         </div>
@@ -120,11 +124,15 @@ const balanceTotal = computed(() => {
 });
 
 const totalIncome = computed(() => {
-  return transactions.value.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+  return transactions.value
+    .filter((t) => t.type === 'income')
+    .reduce((sum, t) => sum + t.amount, 0);
 });
 
 const totalExpense = computed(() => {
-  return transactions.value.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+  return transactions.value
+    .filter((t) => t.type === 'expense')
+    .reduce((sum, t) => sum + t.amount, 0);
 });
 
 const totalPending = computed(() => {

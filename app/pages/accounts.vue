@@ -4,7 +4,8 @@
       <div class="flex items-start justify-between gap-4">
         <div>
           <div v-if="accounts.length > 0" class="text-sm text-ink-soft">
-            Saldo somado: <strong class="text-base text-ink font-bold">{{ formatAmount(totalBalance) }}</strong>
+            Saldo somado:
+            <strong class="text-base text-ink font-bold">{{ formatAmount(totalBalance) }}</strong>
           </div>
           <h1 class="text-4xl font-bold text-ink m-0">Contas</h1>
         </div>
@@ -50,7 +51,9 @@
             </div>
 
             <div class="border-t border-b border-line py-4">
-              <span class="block text-xs font-bold text-ink-muted uppercase tracking-tight mb-1">Saldo</span>
+              <span class="block text-xs font-bold text-ink-muted uppercase tracking-tight mb-1"
+                >Saldo</span
+              >
               <span class="block text-2xl font-extrabold text-ink tabular-nums">{{
                 formatAmount(account.balance)
               }}</span>
@@ -89,13 +92,24 @@
       <aside v-if="showForm" class="w-96 shrink-0">
         <div class="bg-surface-raised border border-line rounded-lg p-6 sticky top-8">
           <div class="flex justify-between items-center mb-2">
-            <h2 class="text-lg font-bold text-ink m-0">{{ formData.id ? 'Editar Conta' : 'Nova conta' }}</h2>
-            <button @click="closeForm" class="fn-btn-icon" title="Fechar" aria-label="Fechar formulário">✕</button>
+            <h2 class="text-lg font-bold text-ink m-0">
+              {{ formData.id ? 'Editar Conta' : 'Nova conta' }}
+            </h2>
+            <button
+              @click="closeForm"
+              class="fn-btn-icon"
+              title="Fechar"
+              aria-label="Fechar formulário"
+            >
+              ✕
+            </button>
           </div>
 
           <form @submit.prevent="handleCreateAccount" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
-              <label for="name" class="text-xs font-bold text-ink-muted uppercase tracking-tight">Nome</label>
+              <label for="name" class="text-xs font-bold text-ink-muted uppercase tracking-tight"
+                >Nome</label
+              >
               <input
                 id="name"
                 v-model="formData.name"
@@ -111,16 +125,40 @@
             <div class="flex flex-col gap-3">
               <p class="text-xs font-bold text-ink-muted uppercase tracking-tight">Tipo</p>
               <div class="flex flex-col gap-3">
-                <label class="flex items-center gap-3 cursor-pointer text-sm text-ink-soft hover:text-ink">
-                  <input v-model="formData.type" type="radio" value="checking" required class="accent-brand" />
+                <label
+                  class="flex items-center gap-3 cursor-pointer text-sm text-ink-soft hover:text-ink"
+                >
+                  <input
+                    v-model="formData.type"
+                    type="radio"
+                    value="checking"
+                    required
+                    class="accent-brand"
+                  />
                   <span class="select-none">Conta corrente</span>
                 </label>
-                <label class="flex items-center gap-3 cursor-pointer text-sm text-ink-soft hover:text-ink">
-                  <input v-model="formData.type" type="radio" value="saving" required class="accent-brand" />
+                <label
+                  class="flex items-center gap-3 cursor-pointer text-sm text-ink-soft hover:text-ink"
+                >
+                  <input
+                    v-model="formData.type"
+                    type="radio"
+                    value="saving"
+                    required
+                    class="accent-brand"
+                  />
                   <span class="select-none">Poupança</span>
                 </label>
-                <label class="flex items-center gap-3 cursor-pointer text-sm text-ink-soft hover:text-ink">
-                  <input v-model="formData.type" type="radio" value="investment" required class="accent-brand" />
+                <label
+                  class="flex items-center gap-3 cursor-pointer text-sm text-ink-soft hover:text-ink"
+                >
+                  <input
+                    v-model="formData.type"
+                    type="radio"
+                    value="investment"
+                    required
+                    class="accent-brand"
+                  />
                   <span class="select-none">Investimento</span>
                 </label>
               </div>
@@ -131,7 +169,10 @@
                 >Saldo inicial</label
               >
               <div class="relative flex items-center">
-                <span class="absolute left-4 text-sm text-ink-muted font-semibold pointer-events-none">R$</span>
+                <span
+                  class="absolute left-4 text-sm text-ink-muted font-semibold pointer-events-none"
+                  >R$</span
+                >
                 <input
                   id="balance"
                   v-model.number="formData.balance"
@@ -151,7 +192,13 @@
               class="px-6 py-3 bg-brand text-on-brand rounded-md text-sm font-bold cursor-pointer hover:bg-brand-strong transition disabled:opacity-60 disabled:cursor-not-allowed h-10 flex items-center justify-center mt-3"
             >
               {{
-                creatingAccount ? (formData.id ? 'Salvando...' : 'Criando...') : formData.id ? 'Salvar' : 'Criar conta'
+                creatingAccount
+                  ? formData.id
+                    ? 'Salvando...'
+                    : 'Criando...'
+                  : formData.id
+                    ? 'Salvar'
+                    : 'Criar conta'
               }}
             </button>
           </form>
@@ -160,7 +207,10 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div
+      v-if="showDeleteModal"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    >
       <div class="bg-surface-raised border border-line rounded-lg p-6 max-w-sm mx-4 shadow-modal">
         <h3 class="text-lg font-bold text-ink m-0 mb-4">Remover Conta?</h3>
         <p class="text-sm text-ink-soft mb-6">
@@ -176,6 +226,9 @@
 </template>
 
 <script setup lang="ts">
+import type { Account } from '~/types';
+import { getErrorMessage } from '~/types';
+
 definePageMeta({
   middleware: 'auth',
 });
@@ -256,8 +309,8 @@ const handleCreateAccount = async () => {
     formData.balance = 0;
     formData.id = null;
     closeForm();
-  } catch (error: any) {
-    errorMessage.value = error?.message || 'Erro ao salvar conta. Tente novamente.';
+  } catch (error: unknown) {
+    errorMessage.value = getErrorMessage(error);
   } finally {
     creatingAccount.value = false;
   }
@@ -272,7 +325,7 @@ const closeForm = () => {
   errorMessage.value = '';
 };
 
-const editAccount = (account: any) => {
+const editAccount = (account: Account) => {
   errorMessage.value = '';
   formData.id = account.id;
   formData.name = account.name;
@@ -294,8 +347,8 @@ const confirmDelete = async () => {
     errorMessage.value = '';
     showDeleteModal.value = false;
     deleteAccountId.value = null;
-  } catch (error: any) {
-    errorMessage.value = error?.message || 'Erro ao remover conta. Tente novamente.';
+  } catch (error: unknown) {
+    errorMessage.value = getErrorMessage(error);
   } finally {
     deletingId.value = null;
   }

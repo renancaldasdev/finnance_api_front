@@ -4,29 +4,29 @@ Referência visual e de comportamento do front-end web que consome a **finannce_
 
 ## O que tem nesta pasta
 
-| Caminho | Para que serve |
-| --- | --- |
-| `design-system/README.md` | Princípios, tom de voz, formato de valores, ícones, acessibilidade. |
-| `design-system/tokens.json` | Fonte da verdade dos tokens (cores claro/escuro, tipografia, espaço, raio, sombra, tamanhos). |
-| `design-system/tokens.css` | Os mesmos tokens como CSS custom properties (`--brand`, `--space-4`…), com tema escuro, e classes `.text-*` de tipografia. |
-| `design-system/components/` | 8 componentes de referência (README com regras + `preview.html`) e `bundle.css` com as classes `fn-*`. |
-| `screens/png/` | Screenshot de cada tela (1440px de largura; modal 560px). |
-| `screens/html/` | Cada tela como HTML estático, abre direto no navegador. Os links entre telas funcionam. |
-| `screens/source/` | Fonte original das telas (`.dc.html`): template com `{{holes}}`, `<sc-for>`, `<sc-if>` e uma classe JS com dados de exemplo e estado (abas, tipo de transação, switch). Útil para ver os estados interativos. |
+| Caminho                     | Para que serve                                                                                                                                                                                                |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `design-system/README.md`   | Princípios, tom de voz, formato de valores, ícones, acessibilidade.                                                                                                                                           |
+| `design-system/tokens.json` | Fonte da verdade dos tokens (cores claro/escuro, tipografia, espaço, raio, sombra, tamanhos).                                                                                                                 |
+| `design-system/tokens.css`  | Os mesmos tokens como CSS custom properties (`--brand`, `--space-4`…), com tema escuro, e classes `.text-*` de tipografia.                                                                                    |
+| `design-system/components/` | 8 componentes de referência (README com regras + `preview.html`) e `bundle.css` com as classes `fn-*`.                                                                                                        |
+| `screens/png/`              | Screenshot de cada tela (1440px de largura; modal 560px).                                                                                                                                                     |
+| `screens/html/`             | Cada tela como HTML estático, abre direto no navegador. Os links entre telas funcionam.                                                                                                                       |
+| `screens/source/`           | Fonte original das telas (`.dc.html`): template com `{{holes}}`, `<sc-for>`, `<sc-if>` e uma classe JS com dados de exemplo e estado (abas, tipo de transação, switch). Útil para ver os estados interativos. |
 
 As telas usam cores literais (hex) em `style=""`. Ao implementar, troque cada uma pelo token equivalente de `tokens.css`. Exceção conhecida: a borda dos inputs nas telas é `#D6DBD8`; use `--control-border` (mais escura, passa 3:1).
 
 ## Telas, rotas e endpoints
 
-| Tela | Arquivo | Rota sugerida | Endpoints |
-| --- | --- | --- | --- |
-| Login / Cadastro | `00-login` | `/login` | `POST /login`, `POST /register` |
-| Visão geral | `01-dashboard` | `/` | `GET /accounts`, `GET /transactions` (filtrado por período) — totais calculados no front |
-| Transações | `02-transactions` | `/transactions` | `GET /transactions?start_date&end_date&type&account_id&category_id&per_page`, `PUT`/`DELETE /transactions/{id}` |
-| Nova transação / Transferência (modal) | `03-new-transaction-modal` | modal sobre qualquer rota | `POST /transactions`, `POST /transactions/transfer` |
-| Contas | `04-accounts` | `/accounts` | `GET`/`POST /accounts`, `PUT`/`DELETE /accounts/{id}` |
-| Categorias | `05-categories` | `/categories` | `GET`/`POST /categories`, `PUT`/`DELETE /categories/{id}`, `PATCH /categories/{id}/toggle-status` |
-| Menu (rodapé) | todas | — | `PUT /update` (editar perfil), `POST /logout` |
+| Tela                                   | Arquivo                    | Rota sugerida             | Endpoints                                                                                                       |
+| -------------------------------------- | -------------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Login / Cadastro                       | `00-login`                 | `/login`                  | `POST /login`, `POST /register`                                                                                 |
+| Visão geral                            | `01-dashboard`             | `/`                       | `GET /accounts`, `GET /transactions` (filtrado por período) — totais calculados no front                        |
+| Transações                             | `02-transactions`          | `/transactions`           | `GET /transactions?start_date&end_date&type&account_id&category_id&per_page`, `PUT`/`DELETE /transactions/{id}` |
+| Nova transação / Transferência (modal) | `03-new-transaction-modal` | modal sobre qualquer rota | `POST /transactions`, `POST /transactions/transfer`                                                             |
+| Contas                                 | `04-accounts`              | `/accounts`               | `GET`/`POST /accounts`, `PUT`/`DELETE /accounts/{id}`                                                           |
+| Categorias                             | `05-categories`            | `/categories`             | `GET`/`POST /categories`, `PUT`/`DELETE /categories/{id}`, `PATCH /categories/{id}/toggle-status`               |
+| Menu (rodapé)                          | todas                      | —                         | `PUT /update` (editar perfil), `POST /logout`                                                                   |
 
 ## Regras de domínio que o design assume
 

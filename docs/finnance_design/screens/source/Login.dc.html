@@ -1,98 +1,355 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<title>Finannce — Entrar</title>
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<style>
-body{margin:0;background:#F4F5F2}
-a{color:#0B6B51}a:hover{color:#08513D}
-</style>
-</helmet>
-<div style="font-family: Manrope, system-ui, sans-serif; color: #0F1A17; background: #F4F5F2; min-height: 100vh; display: flex; flex-wrap: wrap">
+  <head>
+    <meta charset="utf-8" />
+    <title>Finannce — Entrar</title>
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          body {
+            margin: 0;
+            background: #f4f5f2;
+          }
+          a {
+            color: #0b6b51;
+          }
+          a:hover {
+            color: #08513d;
+          }
+        </style>
+      </helmet>
+      <div
+        style="
+          font-family: Manrope, system-ui, sans-serif;
+          color: #0f1a17;
+          background: #f4f5f2;
+          min-height: 100vh;
+          display: flex;
+          flex-wrap: wrap;
+        "
+      >
+        <section
+          style="
+            flex: 1 1 420px;
+            box-sizing: border-box;
+            background: #0f1a17;
+            color: #e7ece9;
+            padding: clamp(32px, 6vw, 72px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 48px;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 10px">
+            <div
+              style="
+                width: 38px;
+                height: 38px;
+                border-radius: 11px;
+                background: #0b7a5c;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg
+                aria-hidden="true"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#FFFFFF"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 20V10"></path>
+                <path d="M10 20V4"></path>
+                <path d="M16 20v-7"></path>
+                <path d="M22 20H2"></path>
+              </svg>
+            </div>
+            <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">finannce</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 20px; max-width: 480px">
+            <h1
+              style="
+                margin: 0;
+                font-size: clamp(32px, 4vw, 48px);
+                line-height: 1.08;
+                font-weight: 800;
+                letter-spacing: -0.03em;
+                color: #ffffff;
+              "
+            >
+              Suas contas, receitas e despesas em um só lugar.
+            </h1>
+            <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #b9c4bf">
+              Organize por categoria, acompanhe o que está em aberto e transfira entre contas sem
+              perder o controle do saldo.
+            </p>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <span
+              style="
+                padding: 8px 14px;
+                border-radius: 99px;
+                background: #1f2e29;
+                font-size: 13px;
+                font-weight: 700;
+              "
+              >Contas</span
+            >
+            <span
+              style="
+                padding: 8px 14px;
+                border-radius: 99px;
+                background: #1f2e29;
+                font-size: 13px;
+                font-weight: 700;
+              "
+              >Categorias</span
+            >
+            <span
+              style="
+                padding: 8px 14px;
+                border-radius: 99px;
+                background: #1f2e29;
+                font-size: 13px;
+                font-weight: 700;
+              "
+              >Transações</span
+            >
+            <span
+              style="
+                padding: 8px 14px;
+                border-radius: 99px;
+                background: #1f2e29;
+                font-size: 13px;
+                font-weight: 700;
+              "
+              >Transferências</span
+            >
+          </div>
+        </section>
 
-<section style="flex: 1 1 420px; box-sizing: border-box; background: #0F1A17; color: #E7ECE9; padding: clamp(32px, 6vw, 72px); display: flex; flex-direction: column; justify-content: space-between; gap: 48px">
-<div style="display: flex; align-items: center; gap: 10px">
-<div style="width: 38px; height: 38px; border-radius: 11px; background: #0B7A5C; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M22 20H2"></path></svg></div>
-<span style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">finannce</span>
-</div>
-<div style="display: flex; flex-direction: column; gap: 20px; max-width: 480px">
-<h1 style="margin: 0; font-size: clamp(32px, 4vw, 48px); line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF">Suas contas, receitas e despesas em um só lugar.</h1>
-<p style="margin: 0; font-size: 17px; line-height: 1.55; color: #B9C4BF">Organize por categoria, acompanhe o que está em aberto e transfira entre contas sem perder o controle do saldo.</p>
-</div>
-<div style="display: flex; flex-wrap: wrap; gap: 10px">
-<span style="padding: 8px 14px; border-radius: 99px; background: #1F2E29; font-size: 13px; font-weight: 700">Contas</span>
-<span style="padding: 8px 14px; border-radius: 99px; background: #1F2E29; font-size: 13px; font-weight: 700">Categorias</span>
-<span style="padding: 8px 14px; border-radius: 99px; background: #1F2E29; font-size: 13px; font-weight: 700">Transações</span>
-<span style="padding: 8px 14px; border-radius: 99px; background: #1F2E29; font-size: 13px; font-weight: 700">Transferências</span>
-</div>
-</section>
+        <section
+          style="
+            flex: 1 1 420px;
+            box-sizing: border-box;
+            padding: clamp(32px, 6vw, 72px) clamp(16px, 4vw, 48px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <form
+            style="width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 18px"
+          >
+            <div
+              role="tablist"
+              aria-label="Acesso"
+              style="
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 6px;
+                padding: 4px;
+                background: #e6e9e7;
+                border-radius: 12px;
+              "
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected="{{loginSelected}}"
+                onClick="{{showLogin}}"
+                style="{{loginTabStyle}}"
+              >
+                Entrar
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="{{registerSelected}}"
+                onClick="{{showRegister}}"
+                style="{{registerTabStyle}}"
+              >
+                Criar conta
+              </button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em">
+                {{heading}}
+              </h2>
+              <p style="margin: 0; font-size: 15px; color: #5b6661">{{subheading}}</p>
+            </div>
 
-<section style="flex: 1 1 420px; box-sizing: border-box; padding: clamp(32px, 6vw, 72px) clamp(16px, 4vw, 48px); display: flex; align-items: center; justify-content: center">
-<form style="width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 18px">
-<div role="tablist" aria-label="Acesso" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 4px; background: #E6E9E7; border-radius: 12px">
-<button type="button" role="tab" aria-selected="{{loginSelected}}" onClick="{{showLogin}}" style="{{loginTabStyle}}">Entrar</button>
-<button type="button" role="tab" aria-selected="{{registerSelected}}" onClick="{{showRegister}}" style="{{registerTabStyle}}">Criar conta</button>
-</div>
-<div style="display: flex; flex-direction: column; gap: 6px">
-<h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em">{{heading}}</h2>
-<p style="margin: 0; font-size: 15px; color: #5B6661">{{subheading}}</p>
-</div>
+            <sc-if value="{{isRegister}}" hint-placeholder-val="{{ false }}">
+              <label
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                  font-size: 13px;
+                  font-weight: 700;
+                  color: #3f4a45;
+                "
+                >Nome
+                <input
+                  type="text"
+                  autocomplete="name"
+                  placeholder="Seu nome"
+                  style="
+                    min-height: 48px;
+                    padding: 0 14px;
+                    border: 1px solid #d6dbd8;
+                    border-radius: 10px;
+                    background: #ffffff;
+                    font: inherit;
+                    font-size: 15px;
+                    font-weight: 500;
+                    color: #0f1a17;
+                  "
+                />
+              </label>
+            </sc-if>
 
-<sc-if value="{{isRegister}}" hint-placeholder-val="{{ false }}">
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Nome
-<input type="text" autocomplete="name" placeholder="Seu nome" style="min-height: 48px; padding: 0 14px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17">
-</label>
-</sc-if>
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >E-mail
+              <input
+                type="email"
+                autocomplete="email"
+                placeholder="voce@email.com"
+                style="
+                  min-height: 48px;
+                  padding: 0 14px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              />
+            </label>
 
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">E-mail
-<input type="email" autocomplete="email" placeholder="voce@email.com" style="min-height: 48px; padding: 0 14px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17">
-</label>
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >Senha
+              <input
+                type="password"
+                placeholder="Mínimo de 8 caracteres"
+                style="
+                  min-height: 48px;
+                  padding: 0 14px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              />
+            </label>
 
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Senha
-<input type="password" placeholder="Mínimo de 8 caracteres" style="min-height: 48px; padding: 0 14px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17">
-</label>
+            <sc-if value="{{isRegister}}" hint-placeholder-val="{{ false }}">
+              <label
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                  font-size: 13px;
+                  font-weight: 700;
+                  color: #3f4a45;
+                "
+                >Confirmar senha
+                <input
+                  type="password"
+                  placeholder="Repita a senha"
+                  style="
+                    min-height: 48px;
+                    padding: 0 14px;
+                    border: 1px solid #d6dbd8;
+                    border-radius: 10px;
+                    background: #ffffff;
+                    font: inherit;
+                    font-size: 15px;
+                    font-weight: 500;
+                    color: #0f1a17;
+                  "
+                />
+              </label>
+            </sc-if>
 
-<sc-if value="{{isRegister}}" hint-placeholder-val="{{ false }}">
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Confirmar senha
-<input type="password" placeholder="Repita a senha" style="min-height: 48px; padding: 0 14px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17">
-</label>
-</sc-if>
-
-<a href="Main.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 50px; border-radius: 10px; background: #0B7A5C; color: #FFFFFF; text-decoration: none; font-weight: 800; font-size: 15px">{{submitLabel}}</a>
-</form>
-</section>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
-class Component extends DCLogic {
-  constructor(props) {
-    super(props);
-    this.state = { mode: 'login' };
-  }
-  renderVals() {
-    const reg = this.state.mode === 'register';
-    const tab = (on) => 'min-height: 44px; border: 0; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; ' + (on ? 'background: #FFFFFF; color: #0F1A17; box-shadow: 0 1px 3px rgba(15,26,23,0.15)' : 'background: transparent; color: #3F4A45');
-    return {
-      isRegister: reg,
-      loginSelected: reg ? 'false' : 'true',
-      registerSelected: reg ? 'true' : 'false',
-      loginTabStyle: tab(!reg),
-      registerTabStyle: tab(reg),
-      showLogin: () => this.setState({ mode: 'login' }),
-      showRegister: () => this.setState({ mode: 'register' }),
-      heading: reg ? 'Crie sua conta' : 'Bem-vindo de volta',
-      subheading: reg ? 'Leva menos de um minuto.' : 'Entre com seu e-mail e senha.',
-      submitLabel: reg ? 'Criar conta' : 'Entrar'
-    };
-  }
-}
-</script>
-</body>
+            <a
+              href="Main.dc.html"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 50px;
+                border-radius: 10px;
+                background: #0b7a5c;
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: 800;
+                font-size: 15px;
+              "
+              >{{submitLabel}}</a
+            >
+          </form>
+        </section>
+      </div>
+    </x-dc>
+    <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+      class Component extends DCLogic {
+        constructor(props) {
+          super(props);
+          this.state = { mode: 'login' };
+        }
+        renderVals() {
+          const reg = this.state.mode === 'register';
+          const tab = (on) => 'min-height: 44px; border: 0; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; ' + (on ? 'background: #FFFFFF; color: #0F1A17; box-shadow: 0 1px 3px rgba(15,26,23,0.15)' : 'background: transparent; color: #3F4A45');
+          return {
+            isRegister: reg,
+            loginSelected: reg ? 'false' : 'true',
+            registerSelected: reg ? 'true' : 'false',
+            loginTabStyle: tab(!reg),
+            registerTabStyle: tab(reg),
+            showLogin: () => this.setState({ mode: 'login' }),
+            showRegister: () => this.setState({ mode: 'register' }),
+            heading: reg ? 'Crie sua conta' : 'Bem-vindo de volta',
+            subheading: reg ? 'Leva menos de um minuto.' : 'Entre com seu e-mail e senha.',
+            submitLabel: reg ? 'Criar conta' : 'Entrar'
+          };
+        }
+      }
+    </script>
+  </body>
 </html>

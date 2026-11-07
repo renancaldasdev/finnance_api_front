@@ -7,12 +7,11 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  to: string
-  icon: string
-  label: string
-}>()
+  to: string;
+  icon: string;
+  label: string;
+}>();
 
-const route = useRoute()
-const isActive = computed(() => route.path === props.to)
+const route = useRoute();
+const isActive = computed(() => route.path === props.to);
 </script>
-

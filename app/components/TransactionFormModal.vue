@@ -7,7 +7,10 @@
     >
       <!-- Header -->
       <div class="flex justify-between items-center">
-        <h2 id="modal-title" class="text-[22px] font-manrope font-extrabold leading-7 m-0 text-ink dark:text-ink-dark">
+        <h2
+          id="modal-title"
+          class="text-[22px] font-manrope font-extrabold leading-7 m-0 text-ink dark:text-ink-dark"
+        >
           Nova transação
         </h2>
         <button
@@ -58,14 +61,18 @@
 
       <!-- Amount Input: R$ + large number -->
       <label class="flex flex-col gap-2">
-        <span class="text-[13px] font-manrope font-bold text-ink-soft dark:text-ink-soft-dark"> Valor </span>
+        <span class="text-[13px] font-manrope font-bold text-ink-soft dark:text-ink-soft-dark">
+          Valor
+        </span>
         <div
           class="flex items-baseline gap-2 px-3.5 py-2.5 border border-control-border dark:border-control-border-dark rounded-xl bg-surface-raised dark:bg-surface-raised-dark"
         >
           <span
             class="text-[20px] font-manrope font-bold"
             :class="
-              type === 'expense' ? 'text-expense dark:text-expense-dark' : 'text-ink-muted dark:text-ink-muted-dark'
+              type === 'expense'
+                ? 'text-expense dark:text-expense-dark'
+                : 'text-ink-muted dark:text-ink-muted-dark'
             "
           >
             R$
@@ -85,8 +92,12 @@
       <!-- Description -->
       <label class="flex flex-col gap-2">
         <div class="flex items-baseline gap-2">
-          <span class="text-[13px] font-manrope font-bold text-ink-soft dark:text-ink-soft-dark"> Descrição </span>
-          <span class="text-[12px] font-manrope font-medium text-ink-muted dark:text-ink-muted-dark">
+          <span class="text-[13px] font-manrope font-bold text-ink-soft dark:text-ink-soft-dark">
+            Descrição
+          </span>
+          <span
+            class="text-[12px] font-manrope font-medium text-ink-muted dark:text-ink-muted-dark"
+          >
             (opcional, até 255 caracteres)
           </span>
         </div>
@@ -100,7 +111,10 @@
       </label>
 
       <!-- Loading State -->
-      <div v-if="loadingAccounts || loadingCategories" class="p-3 bg-surface dark:bg-surface-dark rounded-[10px]">
+      <div
+        v-if="loadingAccounts || loadingCategories"
+        class="p-3 bg-surface dark:bg-surface-dark rounded-[10px]"
+      >
         <p class="text-[14px] font-manrope text-ink-muted dark:text-ink-muted-dark">
           {{ loadingAccounts ? 'Carregando contas...' : 'Carregando categorias...' }}
         </p>
@@ -142,7 +156,13 @@
             class="min-h-11 px-2.5 border border-control-border dark:border-control-border-dark rounded-[10px] font-manrope text-[15px] font-medium text-ink dark:text-ink-dark bg-surface-raised dark:bg-surface-raised-dark disabled:opacity-50"
           >
             <option value="">
-              {{ loadingAccounts ? 'Carregando...' : accounts.length === 0 ? 'Nenhuma conta' : 'Selecionar...' }}
+              {{
+                loadingAccounts
+                  ? 'Carregando...'
+                  : accounts.length === 0
+                    ? 'Nenhuma conta'
+                    : 'Selecionar...'
+              }}
             </option>
             <option v-for="acc in accounts" :key="acc.id" :value="acc.id">
               {{ acc.name }}
@@ -191,14 +211,20 @@
         <label
           class="flex items-center gap-3 min-h-11 font-manrope text-[14px] font-semibold text-ink dark:text-ink-dark cursor-pointer"
         >
-          <input v-model="isPaid" type="checkbox" class="w-5 h-5 rounded accent-brand dark:accent-brand-dark" />
+          <input
+            v-model="isPaid"
+            type="checkbox"
+            class="w-5 h-5 rounded accent-brand dark:accent-brand-dark"
+          />
           Já foi {{ type === 'expense' ? 'pago' : 'recebido' }}
         </label>
       </template>
 
       <!-- Date -->
       <label class="flex flex-col gap-2">
-        <span class="text-[13px] font-manrope font-bold text-ink-soft dark:text-ink-soft-dark"> Data </span>
+        <span class="text-[13px] font-manrope font-bold text-ink-soft dark:text-ink-soft-dark">
+          Data
+        </span>
         <input
           v-model="date"
           type="date"
@@ -235,6 +261,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, toRef } from 'vue';
+import type { Category } from '~/types';
+import { getErrorMessage } from '~/types';
 
 type TransactionType = 'expense' | 'income' | 'transfer';
 
@@ -273,7 +301,7 @@ const { token } = useAuth();
 const isOpenRef = toRef(props, 'isOpen');
 
 const filteredCategories = computed(() => {
-  const isActive = (c: any) => c.active !== false;
+  const isActive = (c: Category) => c.is_active !== false;
   if (type.value === 'transfer') return categories.value.filter(isActive);
   return categories.value.filter((c) => c.type === type.value && isActive(c));
 });
@@ -301,7 +329,7 @@ watch(
     if (newVal && isOpenRef.value && accounts.value.length === 0) {
       loadData();
     }
-  },
+  }
 );
 
 const formatAmount = (e: Event) => {
@@ -319,7 +347,7 @@ const formatAmount = (e: Event) => {
 const getAmount = () => {
   // Converte "1.234,56" ou "1234,56" para número (1234.56)
   const cleaned = amount.value.replace(/\./g, '').replace(',', '.');
-  return parseFloat(cleaned) || 0;
+  return Number.parseFloat(cleaned) || 0;
 };
 
 const validate = () => {
@@ -378,8 +406,8 @@ const save = async () => {
     await createTransaction(payload);
     emit('saved');
     close();
-  } catch (err: any) {
-    error.value = err.message || 'Erro ao salvar';
+  } catch (err: unknown) {
+    error.value = getErrorMessage(err);
   } finally {
     loading.value = false;
   }

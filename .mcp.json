@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["@context7/server"]
+    },
+    "playwright": {
+      "command": "node",
+      "args": ["--eval", "require('@playwright/test').chromium"]
+    }
+  }
+}

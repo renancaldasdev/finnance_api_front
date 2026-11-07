@@ -1,19 +1,46 @@
 <!-- @dsCard group="Formulários" height=76 -->
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset="utf-8">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="../../tokens.css">
-<link rel="stylesheet" href="../bundle.css"><title>Switch</title></head>
-<body>
-<div class="fn-row">
-<button type="button" class="fn-switch" role="switch" aria-checked="true" aria-label="Categoria Moradia ativa"><span class="fn-switch-track"><span class="fn-switch-knob"></span></span></button>
-<button type="button" class="fn-switch" role="switch" aria-checked="false" aria-label="Categoria Educação ativa"><span class="fn-switch-track"><span class="fn-switch-knob"></span></span></button>
-</div>
-<script>
-document.querySelectorAll('.fn-switch').forEach(function (s) {
-  s.addEventListener('click', function () { s.setAttribute('aria-checked', s.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); });
-});
-</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    />
+    <link rel="stylesheet" href="../../tokens.css" />
+    <link rel="stylesheet" href="../bundle.css" />
+    <title>Switch</title>
+  </head>
+  <body>
+    <div class="fn-row">
+      <button
+        type="button"
+        class="fn-switch"
+        role="switch"
+        aria-checked="true"
+        aria-label="Categoria Moradia ativa"
+      >
+        <span class="fn-switch-track"><span class="fn-switch-knob"></span></span>
+      </button>
+      <button
+        type="button"
+        class="fn-switch"
+        role="switch"
+        aria-checked="false"
+        aria-label="Categoria Educação ativa"
+      >
+        <span class="fn-switch-track"><span class="fn-switch-knob"></span></span>
+      </button>
+    </div>
+    <script>
+      document.querySelectorAll('.fn-switch').forEach(function (s) {
+        s.addEventListener('click', function () {
+          s.setAttribute(
+            'aria-checked',
+            s.getAttribute('aria-checked') === 'true' ? 'false' : 'true'
+          );
+        });
+      });
+    </script>
+  </body>
 </html>

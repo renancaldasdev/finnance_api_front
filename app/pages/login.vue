@@ -6,7 +6,9 @@
     >
       <!-- Logo -->
       <div class="flex gap-2.5 items-center">
-        <div class="w-10 h-10 rounded-[11px] bg-brand flex items-center justify-center text-2xl">📊</div>
+        <div class="w-10 h-10 rounded-[11px] bg-brand flex items-center justify-center text-2xl">
+          📊
+        </div>
         <span class="text-[22px] font-800 text-on-brand">finannce</span>
       </div>
 
@@ -16,16 +18,22 @@
           Suas contas, receitas e despesas em um só lugar.
         </h1>
         <p class="text-[17px] leading-[1.55] text-sidebar-ink m-0">
-          Organize por categoria, acompanhe o que está em aberto e transfira entre contas sem perder o controle do
-          saldo.
+          Organize por categoria, acompanhe o que está em aberto e transfira entre contas sem perder
+          o controle do saldo.
         </p>
       </div>
 
       <!-- Feature Badges -->
       <div class="flex flex-wrap gap-2.5">
-        <span class="px-3.5 py-2 rounded-full bg-sidebar-active text-xs font-bold text-sidebar-ink">Contas</span>
-        <span class="px-3.5 py-2 rounded-full bg-sidebar-active text-xs font-bold text-sidebar-ink">Categorias</span>
-        <span class="px-3.5 py-2 rounded-full bg-sidebar-active text-xs font-bold text-sidebar-ink">Transações</span>
+        <span class="px-3.5 py-2 rounded-full bg-sidebar-active text-xs font-bold text-sidebar-ink"
+          >Contas</span
+        >
+        <span class="px-3.5 py-2 rounded-full bg-sidebar-active text-xs font-bold text-sidebar-ink"
+          >Categorias</span
+        >
+        <span class="px-3.5 py-2 rounded-full bg-sidebar-active text-xs font-bold text-sidebar-ink"
+          >Transações</span
+        >
         <span class="px-3.5 py-2 rounded-full bg-sidebar-active text-xs font-bold text-sidebar-ink"
           >Transferências</span
         >
@@ -37,7 +45,11 @@
       class="flex-1 basis-96 p-[32px_clamp(16px,3vw,40px)_48px] flex items-center justify-center overflow-y-auto"
     >
       <!-- Login Form -->
-      <form v-if="mode === 'login'" @submit.prevent="handleLogin" class="w-full max-w-[420px] flex flex-col gap-[18px]">
+      <form
+        v-if="mode === 'login'"
+        @submit.prevent="handleLogin"
+        class="w-full max-w-[420px] flex flex-col gap-[18px]"
+      >
         <!-- Tabs -->
         <div class="grid grid-cols-2 gap-1.5 p-1 bg-[#E6E9E7] rounded-lg">
           <button
@@ -62,7 +74,10 @@
         </div>
 
         <!-- Error Message -->
-        <div v-if="errorMessage" class="bg-[#FDF0E3] text-danger p-3 rounded-lg text-sm border-l-4 border-danger">
+        <div
+          v-if="errorMessage"
+          class="bg-[#FDF0E3] text-danger p-3 rounded-lg text-sm border-l-4 border-danger"
+        >
           {{ errorMessage }}
         </div>
 
@@ -133,7 +148,10 @@
         </div>
 
         <!-- Error Message -->
-        <div v-if="errorMessage" class="bg-[#FDF0E3] text-danger p-3 rounded-lg text-sm border-l-4 border-danger">
+        <div
+          v-if="errorMessage"
+          class="bg-[#FDF0E3] text-danger p-3 rounded-lg text-sm border-l-4 border-danger"
+        >
           {{ errorMessage }}
         </div>
 
@@ -204,7 +222,8 @@
   </div>
 </template>
 
-<script setup lang="ts">;
+<script setup lang="ts">
+import { getErrorMessage } from '~/types';
 
 const mode = ref<'login' | 'register'>('login');
 
@@ -230,8 +249,8 @@ const handleLogin = async () => {
 
   try {
     await login(loginForm.email, loginForm.password);
-  } catch (error: any) {
-    errorMessage.value = error.message || 'Falha ao fazer login';
+  } catch (error: unknown) {
+    errorMessage.value = getErrorMessage(error);
   } finally {
     loading.value = false;
   }
@@ -242,9 +261,14 @@ const handleRegister = async () => {
   errorMessage.value = '';
 
   try {
-    await register(registerForm.name, registerForm.email, registerForm.password, registerForm.password_confirmation);
-  } catch (error: any) {
-    errorMessage.value = error.message || 'Falha ao registrar';
+    await register(
+      registerForm.name,
+      registerForm.email,
+      registerForm.password,
+      registerForm.password_confirmation
+    );
+  } catch (error: unknown) {
+    errorMessage.value = getErrorMessage(error);
   } finally {
     loading.value = false;
   }

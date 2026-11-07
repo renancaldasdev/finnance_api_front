@@ -1,8 +1,10 @@
+import type { User, AuthResponse } from '~/types';
+
 export const useAuth = () => {
   const { post, get, token } = useApi();
   const router = useRouter();
 
-  const user = useState<any>('auth.user', () => null);
+  const user = useState<User | null>('auth.user', () => null);
   const isAuthenticated = computed(() => !!token.value && !!user.value);
 
   const initToken = () => {
@@ -21,33 +23,43 @@ export const useAuth = () => {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<User> => {
     try {
-      const res = await post('/login', { email, password });
-      const data = res.data || res;
-      token.value = data.token;
+      const res = (await post('/login', { email, password })) as AuthResponse;
+      const data = res.data || (res as unknown as User);
+      token.value = data.token || '';
       user.value = data;
-      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('auth_token', data.token || '');
       localStorage.setItem('auth_user', JSON.stringify(data));
       await router.push('/dashboard');
       return data;
     } catch (error) {
-      throw new Error('Login failed');
+      throw new Error('Login failed', { cause: error });
     }
   };
 
-  const register = async (name: string, email: string, password: string, passwordConfirmation: string) => {
+  const register = async (
+    name: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string
+  ): Promise<User> => {
     try {
-      const res = await post('/register', { name, email, password, password_confirmation: passwordConfirmation });
-      const data = res.data || res;
-      token.value = data.token;
+      const res = (await post('/register', {
+        name,
+        email,
+        password,
+        password_confirmation: passwordConfirmation,
+      })) as AuthResponse;
+      const data = res.data || (res as unknown as User);
+      token.value = data.token || '';
       user.value = data;
-      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('auth_token', data.token || '');
       localStorage.setItem('auth_user', JSON.stringify(data));
       await router.push('/dashboard');
       return data;
     } catch (error) {
-      throw new Error('Registration failed');
+      throw new Error('Registration failed', { cause: error });
     }
   };
 
@@ -66,10 +78,10 @@ export const useAuth = () => {
     }
   };
 
-  const getMe = async () => {
+  const getMe = async (): Promise<User> => {
     try {
-      const res = await get('/me');
-      const data = res.data || res;
+      const res = (await get('/me')) as AuthResponse;
+      const data = res.data || (res as unknown as User);
       user.value = data;
       return data;
     } catch (error) {

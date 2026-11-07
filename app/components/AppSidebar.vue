@@ -1,5 +1,7 @@
 <template>
-  <nav class="w-60 bg-sidebar text-sidebar-ink p-[28px_18px] flex flex-col gap-7 md:flex md:min-h-screen">
+  <nav
+    class="w-60 bg-sidebar text-sidebar-ink p-[28px_18px] flex flex-col gap-7 md:flex md:min-h-screen"
+  >
     <!-- Logo -->
     <div class="flex items-center gap-2.5 px-2.5">
       <div class="w-8.5 h-8.5 rounded-[10px] bg-brand flex items-center justify-center">

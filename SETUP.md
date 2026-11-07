@@ -43,10 +43,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
         return response()->json(['user' => $request->user()]);
     });
-    
+
     // Transactions CRUD
     Route::apiResource('transactions', TransactionController::class);
-    
+
     // Logout
     Route::post('/logout', function (Request $request) {
         $request->user()->tokens()->delete();
@@ -64,7 +64,7 @@ Route::post('/register', [AuthController::class, 'register']);
 // app/Models/Transaction.php
 class Transaction extends Model {
     protected $fillable = ['user_id', 'description', 'amount', 'type', 'created_at'];
-    
+
     protected $casts = [
         'amount' => 'decimal:2',
         'type' => 'string', // 'income' ou 'expense'
@@ -85,11 +85,13 @@ Schema::create('transactions', function (Blueprint $table) {
 ## 3. Variáveis de Ambiente
 
 **Frontend (.env):**
+
 ```
 NUXT_PUBLIC_API_BASE=http://localhost
 ```
 
 **Backend (.env - Laravel):**
+
 ```
 APP_URL=http://localhost
 FRONTEND_URL=http://localhost:3000
@@ -117,12 +119,14 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000
 ## 5. Iniciar Ambos os Servidores
 
 **Terminal 1 - Frontend:**
+
 ```bash
 cd ~/dev/finnace_api_front
 npm run dev
 ```
 
 **Terminal 2 - Backend:**
+
 ```bash
 cd ~/dev/finnace_api
 php artisan serve  # Roda em http://localhost (porta 80)
@@ -162,25 +166,26 @@ Siga o padrão de `useTransactions.ts`:
 ```typescript
 // app/composables/useAccounts.ts
 export const useAccounts = () => {
-  const { get, post, put, del } = useApi()
-  
-  const accounts = ref([])
-  
+  const { get, post, put, del } = useApi();
+
+  const accounts = ref([]);
+
   const fetchAccounts = async () => {
-    const data = await get('/accounts')
-    accounts.value = data.data || data
-  }
-  
+    const data = await get('/accounts');
+    accounts.value = data.data || data;
+  };
+
   // ... mais CRUD operations
-  
-  return { accounts, fetchAccounts, /* ... */ }
-}
+
+  return { accounts, fetchAccounts /* ... */ };
+};
 ```
 
 Depois use em qualquer página:
+
 ```typescript
-const { accounts } = useAccounts()
-onMounted(() => accounts.fetch())
+const { accounts } = useAccounts();
+onMounted(() => accounts.fetch());
 ```
 
 ## Troubleshooting

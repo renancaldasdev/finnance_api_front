@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev)",
+      "Bash(npm run build)",
+      "Bash(npm run generate)",
+      "Bash(npm run preview)",
+      "Bash(npm run test)",
+      "Bash(npm run test:watch)",
+      "Bash(npm run test:ui)",
+      "Bash(npm run test:coverage)",
+      "Bash(npm install)"
+    ]
+  },
+  "hooks": {
+    "postToolUse": {
+      "Edit": ["npx prettier --write {file}", "npx tsc --noEmit"]
+    },
+    "preToolUse": {
+      "Edit": [
+        "if grep -qE '^(\\.(env|auth.*token)|NUXT_SECRET)' {file}; then echo 'BLOCKED: Sensitive file edit' && exit 1; fi"
+      ],
+      "Write": [
+        "if grep -qE '^(\\.(env|auth.*token)|NUXT_SECRET)' {file}; then echo 'BLOCKED: Sensitive file write' && exit 1; fi"
+      ]
+    }
+  }
+}

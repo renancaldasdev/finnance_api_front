@@ -1,67 +1,78 @@
+import type { Transaction, TransactionPayload, TransactionParams, ApiResponse } from '~/types';
+import { getErrorMessage } from '~/types';
+
 export const useTransactions = () => {
-  const { get, post, put, patch, del } = useApi()
+  const { get, post, put, del } = useApi();
 
-  const transactions = ref<any[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+  const transactions = ref<Transaction[]>([]);
+  const loading = ref(false);
+  const error = ref<string | null>(null);
 
-  const fetchTransactions = async (params?: any) => {
-    loading.value = true
-    error.value = null
+  const fetchTransactions = async (params?: TransactionParams) => {
+    loading.value = true;
+    error.value = null;
     try {
-      const query = params ? `?${new URLSearchParams(params)}` : ''
-      const data = await get(`/transactions${query}`)
-      transactions.value = data.data || data
-    } catch (err: any) {
-      error.value = err.message
+      const query = params
+        ? `?${new URLSearchParams(Object.entries(params).map(([k, v]) => [k, String(v)]))}`
+        : '';
+      const data = (await get(`/transactions${query}`)) as ApiResponse<Transaction[]>;
+      transactions.value = data.data || (data as unknown as Transaction[]);
+    } catch (err: unknown) {
+      error.value = getErrorMessage(err);
     } finally {
-      loading.value = false
+      loading.value = false;
     }
-  }
+  };
 
-  const getTransaction = async (id: number) => {
+  const getTransaction = async (id: number): Promise<Transaction> => {
     try {
-      return await get(`/transactions/${id}`)
-    } catch (err: any) {
-      error.value = err.message
-      throw err
+      const data = (await get(`/transactions/${id}`)) as ApiResponse<Transaction>;
+      return data.data || (data as unknown as Transaction);
+    } catch (err: unknown) {
+      error.value = getErrorMessage(err);
+      throw err;
     }
-  }
+  };
 
-  const createTransaction = async (transaction: any) => {
+  const createTransaction = async (transaction: TransactionPayload): Promise<Transaction> => {
     try {
-      const data = await post('/transactions', transaction)
-      transactions.value.push(data.data || data)
-      return data
-    } catch (err: any) {
-      error.value = err.message
-      throw err
+      const data = (await post('/transactions', transaction)) as ApiResponse<Transaction>;
+      const created = data.data || (data as unknown as Transaction);
+      transactions.value.push(created);
+      return created;
+    } catch (err: unknown) {
+      error.value = getErrorMessage(err);
+      throw err;
     }
-  }
+  };
 
-  const updateTransaction = async (id: number, transaction: any) => {
+  const updateTransaction = async (
+    id: number,
+    transaction: Partial<TransactionPayload>
+  ): Promise<Transaction> => {
     try {
-      const data = await put(`/transactions/${id}`, transaction)
-      const index = transactions.value.findIndex(t => t.id === id)
+      const data = (await put(`/transactions/${id}`, transaction)) as ApiResponse<Transaction>;
+      const updated = data.data || (data as unknown as Transaction);
+      const index = transactions.value.findIndex((t) => t.id === id);
       if (index !== -1) {
-        transactions.value[index] = data.data || data
+        transactions.value[index] = updated;
       }
-      return data
-    } catch (err: any) {
-      error.value = err.message
-      throw err
+      return updated;
+    } catch (err: unknown) {
+      error.value = getErrorMessage(err);
+      throw err;
     }
-  }
+  };
 
   const deleteTransaction = async (id: number) => {
     try {
-      await del(`/transactions/${id}`)
-      transactions.value = transactions.value.filter(t => t.id !== id)
-    } catch (err: any) {
-      error.value = err.message
-      throw err
+      await del(`/transactions/${id}`);
+      transactions.value = transactions.value.filter((t) => t.id !== id);
+    } catch (err: unknown) {
+      error.value = getErrorMessage(err);
+      throw err;
     }
-  }
+  };
 
   return {
     transactions,
@@ -71,6 +82,6 @@ export const useTransactions = () => {
     getTransaction,
     createTransaction,
     updateTransaction,
-    deleteTransaction
-  }
-}
+    deleteTransaction,
+  };
+};

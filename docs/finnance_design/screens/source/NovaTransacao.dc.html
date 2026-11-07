@@ -1,121 +1,468 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<title>Finannce — Nova transação</title>
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<style>
-body{margin:0}
-a{color:#0B6B51}a:hover{color:#08513D}
-</style>
-</helmet>
-<div role="dialog" aria-labelledby="nt-title" style="width: 560px; height: 720px; box-sizing: border-box; background: #FFFFFF; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 18px; font-family: Manrope, system-ui, sans-serif; color: #0F1A17; font-variant-numeric: tabular-nums">
+  <head>
+    <meta charset="utf-8" />
+    <title>Finannce — Nova transação</title>
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          body {
+            margin: 0;
+          }
+          a {
+            color: #0b6b51;
+          }
+          a:hover {
+            color: #08513d;
+          }
+        </style>
+      </helmet>
+      <div
+        role="dialog"
+        aria-labelledby="nt-title"
+        style="
+          width: 560px;
+          height: 720px;
+          box-sizing: border-box;
+          background: #ffffff;
+          border-radius: 20px;
+          padding: 28px;
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+          font-family: Manrope, system-ui, sans-serif;
+          color: #0f1a17;
+          font-variant-numeric: tabular-nums;
+        "
+      >
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h2
+            id="nt-title"
+            style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.01em"
+          >
+            {{title}}
+          </h2>
+          <a
+            href="Main.dc.html"
+            aria-label="Fechar"
+            style="
+              width: 44px;
+              height: 44px;
+              border-radius: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #3f4a45;
+              text-decoration: none;
+            "
+            ><svg
+              aria-hidden="true"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M6 6l12 12"></path>
+              <path d="M18 6L6 18"></path></svg
+          ></a>
+        </div>
 
-<div style="display: flex; justify-content: space-between; align-items: center">
-<h2 id="nt-title" style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.01em">{{title}}</h2>
-<a href="Main.dc.html" aria-label="Fechar" style="width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #3F4A45; text-decoration: none"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg></a>
-</div>
+        <div
+          role="radiogroup"
+          aria-label="Tipo"
+          style="
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+            padding: 4px;
+            background: #f0f2f0;
+            border-radius: 12px;
+          "
+        >
+          <sc-for list="{{types}}" as="tp" hint-placeholder-count="3">
+            <button
+              type="button"
+              role="radio"
+              aria-checked="{{tp.checked}}"
+              onClick="{{tp.pick}}"
+              style="{{tp.style}}"
+            >
+              {{tp.label}}
+            </button>
+          </sc-for>
+        </div>
 
-<div role="radiogroup" aria-label="Tipo" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 4px; background: #F0F2F0; border-radius: 12px">
-<sc-for list="{{types}}" as="tp" hint-placeholder-count="3">
-<button type="button" role="radio" aria-checked="{{tp.checked}}" onClick="{{tp.pick}}" style="{{tp.style}}">{{tp.label}}</button>
-</sc-for>
-</div>
+        <label
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #3f4a45;
+          "
+          >Valor
+          <span
+            style="
+              display: flex;
+              align-items: baseline;
+              gap: 8px;
+              padding: 10px 14px;
+              border: 1.5px solid #d6dbd8;
+              border-radius: 12px;
+            "
+          >
+            <span style="font-size: 20px; font-weight: 700; color: #5b6661">R$</span>
+            <input
+              type="text"
+              inputmode="decimal"
+              placeholder="0,00"
+              style="{{amountInputStyle}}"
+            />
+          </span>
+        </label>
 
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Valor
-<span style="display: flex; align-items: baseline; gap: 8px; padding: 10px 14px; border: 1.5px solid #D6DBD8; border-radius: 12px">
-<span style="font-size: 20px; font-weight: 700; color: #5B6661">R$</span>
-<input type="text" inputmode="decimal" placeholder="0,00" style="{{amountInputStyle}}">
-</span>
-</label>
+        <label
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #3f4a45;
+          "
+          >Descrição
+          <span style="font-weight: 500; color: #5b6661">(opcional, até 255 caracteres)</span>
+          <input
+            type="text"
+            maxlength="255"
+            placeholder="Ex.: Supermercado"
+            style="
+              min-height: 44px;
+              padding: 0 14px;
+              border: 1px solid #d6dbd8;
+              border-radius: 10px;
+              font: inherit;
+              font-size: 15px;
+              font-weight: 500;
+              color: #0f1a17;
+            "
+          />
+        </label>
 
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Descrição <span style="font-weight: 500; color: #5B6661">(opcional, até 255 caracteres)</span>
-<input type="text" maxlength="255" placeholder="Ex.: Supermercado" style="min-height: 44px; padding: 0 14px; border: 1px solid #D6DBD8; border-radius: 10px; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17">
-</label>
+        <sc-if value="{{isTransfer}}" hint-placeholder-val="{{ false }}">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >Conta de origem
+              <select
+                style="
+                  min-height: 44px;
+                  padding: 0 10px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              >
+                <option>Itaú — R$ 3.140,25</option>
+                <option>Nubank — R$ 6.320,15</option>
+                <option>Reserva CDB — R$ 15.400,00</option>
+              </select>
+            </label>
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >Conta de destino
+              <select
+                style="
+                  min-height: 44px;
+                  padding: 0 10px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              >
+                <option>Reserva CDB</option>
+                <option>Nubank</option>
+                <option>Itaú</option>
+              </select>
+            </label>
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >Categoria de saída
+              <select
+                style="
+                  min-height: 44px;
+                  padding: 0 10px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              >
+                <option>Transferência (saída)</option>
+                <option>Investimentos</option>
+              </select>
+            </label>
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >Categoria de entrada
+              <select
+                style="
+                  min-height: 44px;
+                  padding: 0 10px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              >
+                <option>Transferência (entrada)</option>
+                <option>Rendimentos</option>
+              </select>
+            </label>
+          </div>
+          <p
+            style="
+              margin: 0;
+              padding: 10px 12px;
+              border-radius: 10px;
+              background: #f4f5f2;
+              font-size: 13px;
+              color: #3f4a45;
+              line-height: 1.45;
+            "
+          >
+            Gera duas transações: uma despesa na conta de origem e uma receita na de destino. O
+            saldo da origem precisa cobrir o valor.
+          </p>
+        </sc-if>
 
-<sc-if value="{{isTransfer}}" hint-placeholder-val="{{ false }}">
-<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Conta de origem
-<select style="min-height: 44px; padding: 0 10px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17"><option>Itaú — R$ 3.140,25</option><option>Nubank — R$ 6.320,15</option><option>Reserva CDB — R$ 15.400,00</option></select>
-</label>
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Conta de destino
-<select style="min-height: 44px; padding: 0 10px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17"><option>Reserva CDB</option><option>Nubank</option><option>Itaú</option></select>
-</label>
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Categoria de saída
-<select style="min-height: 44px; padding: 0 10px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17"><option>Transferência (saída)</option><option>Investimentos</option></select>
-</label>
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Categoria de entrada
-<select style="min-height: 44px; padding: 0 10px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17"><option>Transferência (entrada)</option><option>Rendimentos</option></select>
-</label>
-</div>
-<p style="margin: 0; padding: 10px 12px; border-radius: 10px; background: #F4F5F2; font-size: 13px; color: #3F4A45; line-height: 1.45">Gera duas transações: uma despesa na conta de origem e uma receita na de destino. O saldo da origem precisa cobrir o valor.</p>
-</sc-if>
+        <sc-if value="{{isRegular}}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >Categoria
+              <select
+                style="
+                  min-height: 44px;
+                  padding: 0 10px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              >
+                <sc-for list="{{categoryOptions}}" as="o" hint-placeholder-count="3"
+                  ><option>{{o}}</option></sc-for
+                >
+              </select>
+            </label>
+            <label
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #3f4a45;
+              "
+              >Conta
+              <select
+                style="
+                  min-height: 44px;
+                  padding: 0 10px;
+                  border: 1px solid #d6dbd8;
+                  border-radius: 10px;
+                  background: #ffffff;
+                  font: inherit;
+                  font-size: 15px;
+                  font-weight: 500;
+                  color: #0f1a17;
+                "
+              >
+                <option>Nubank</option>
+                <option>Itaú</option>
+                <option>Reserva CDB</option>
+              </select>
+            </label>
+          </div>
+          <label
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              min-height: 44px;
+              font-size: 14px;
+              font-weight: 600;
+              cursor: pointer;
+            "
+          >
+            <input
+              type="checkbox"
+              checked=""
+              style="width: 20px; height: 20px; accent-color: #0b7a5c"
+            />
+            {{paidLabel}}
+          </label>
+        </sc-if>
 
-<sc-if value="{{isRegular}}" hint-placeholder-val="{{ true }}">
-<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Categoria
-<select style="min-height: 44px; padding: 0 10px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17">
-<sc-for list="{{categoryOptions}}" as="o" hint-placeholder-count="3"><option>{{o}}</option></sc-for>
-</select>
-</label>
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Conta
-<select style="min-height: 44px; padding: 0 10px; border: 1px solid #D6DBD8; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17"><option>Nubank</option><option>Itaú</option><option>Reserva CDB</option></select>
-</label>
-</div>
-<label style="display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 14px; font-weight: 600; cursor: pointer">
-<input type="checkbox" checked="" style="width: 20px; height: 20px; accent-color: #0B7A5C">
-{{paidLabel}}
-</label>
-</sc-if>
+        <label
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #3f4a45;
+          "
+          >Data
+          <input
+            type="date"
+            value="2026-11-02"
+            style="
+              min-height: 44px;
+              padding: 0 10px;
+              border: 1px solid #d6dbd8;
+              border-radius: 10px;
+              font: inherit;
+              font-size: 15px;
+              font-weight: 500;
+              color: #0f1a17;
+            "
+          />
+        </label>
 
-<label style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700; color: #3F4A45">Data
-<input type="date" value="2026-11-02" style="min-height: 44px; padding: 0 10px; border: 1px solid #D6DBD8; border-radius: 10px; font: inherit; font-size: 15px; font-weight: 500; color: #0F1A17">
-</label>
-
-<div style="margin-top: auto; display: flex; gap: 10px; justify-content: flex-end">
-<a href="Main.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid #D6DBD8; border-radius: 10px; color: #0F1A17; text-decoration: none; font-weight: 700; font-size: 14px">Cancelar</a>
-<a href="Transacoes.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 10px; background: #0B7A5C; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 14px">{{submitLabel}}</a>
-</div>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":560,"height":720}}'>
-class Component extends DCLogic {
-  constructor(props) {
-    super(props);
-    this.state = { kind: 'expense' };
-  }
-  renderVals() {
-    const kind = this.state.kind;
-    const defs = [['expense', 'Despesa', '#B4470F'], ['income', 'Receita', '#0B7A5C'], ['transfer', 'Transferência', '#0F1A17']];
-    const types = defs.map(([id, label, color]) => {
-      const on = id === kind;
-      return {
-        label,
-        checked: on ? 'true' : 'false',
-        pick: () => this.setState({ kind: id }),
-        style: 'min-height: 44px; border: 0; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; ' + (on ? 'background: #FFFFFF; color: ' + color + '; box-shadow: 0 1px 3px rgba(15,26,23,0.15)' : 'background: transparent; color: #3F4A45')
-      };
-    });
-    const colorFor = { expense: '#B4470F', income: '#0B7A5C', transfer: '#0F1A17' }[kind];
-    const isTransfer = kind === 'transfer';
-    return {
-      types,
-      isTransfer,
-      isRegular: !isTransfer,
-      title: isTransfer ? 'Transferência entre contas' : 'Nova transação',
-      categoryOptions: kind === 'income' ? ['Salário', 'Freelance', 'Rendimentos'] : ['Alimentação', 'Moradia', 'Transporte', 'Lazer', 'Saúde'],
-      paidLabel: kind === 'income' ? 'Já foi recebido' : 'Já foi pago',
-      submitLabel: isTransfer ? 'Transferir' : 'Salvar transação',
-      amountInputStyle: 'border: 0; outline: none; font: inherit; font-size: 32px; font-weight: 800; width: 100%; min-width: 0; background: transparent; color: ' + colorFor
-    };
-  }
-}
-</script>
-</body>
+        <div style="margin-top: auto; display: flex; gap: 10px; justify-content: flex-end">
+          <a
+            href="Main.dc.html"
+            style="
+              display: flex;
+              align-items: center;
+              min-height: 44px;
+              padding: 0 18px;
+              border: 1px solid #d6dbd8;
+              border-radius: 10px;
+              color: #0f1a17;
+              text-decoration: none;
+              font-weight: 700;
+              font-size: 14px;
+            "
+            >Cancelar</a
+          >
+          <a
+            href="Transacoes.dc.html"
+            style="
+              display: flex;
+              align-items: center;
+              min-height: 44px;
+              padding: 0 22px;
+              border-radius: 10px;
+              background: #0b7a5c;
+              color: #ffffff;
+              text-decoration: none;
+              font-weight: 700;
+              font-size: 14px;
+            "
+            >{{submitLabel}}</a
+          >
+        </div>
+      </div>
+    </x-dc>
+    <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":560,"height":720}}'>
+      class Component extends DCLogic {
+        constructor(props) {
+          super(props);
+          this.state = { kind: 'expense' };
+        }
+        renderVals() {
+          const kind = this.state.kind;
+          const defs = [['expense', 'Despesa', '#B4470F'], ['income', 'Receita', '#0B7A5C'], ['transfer', 'Transferência', '#0F1A17']];
+          const types = defs.map(([id, label, color]) => {
+            const on = id === kind;
+            return {
+              label,
+              checked: on ? 'true' : 'false',
+              pick: () => this.setState({ kind: id }),
+              style: 'min-height: 44px; border: 0; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; ' + (on ? 'background: #FFFFFF; color: ' + color + '; box-shadow: 0 1px 3px rgba(15,26,23,0.15)' : 'background: transparent; color: #3F4A45')
+            };
+          });
+          const colorFor = { expense: '#B4470F', income: '#0B7A5C', transfer: '#0F1A17' }[kind];
+          const isTransfer = kind === 'transfer';
+          return {
+            types,
+            isTransfer,
+            isRegular: !isTransfer,
+            title: isTransfer ? 'Transferência entre contas' : 'Nova transação',
+            categoryOptions: kind === 'income' ? ['Salário', 'Freelance', 'Rendimentos'] : ['Alimentação', 'Moradia', 'Transporte', 'Lazer', 'Saúde'],
+            paidLabel: kind === 'income' ? 'Já foi recebido' : 'Já foi pago',
+            submitLabel: isTransfer ? 'Transferir' : 'Salvar transação',
+            amountInputStyle: 'border: 0; outline: none; font: inherit; font-size: 32px; font-weight: 800; width: 100%; min-width: 0; background: transparent; color: ' + colorFor
+          };
+        }
+      }
+    </script>
+  </body>
 </html>

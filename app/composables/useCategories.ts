@@ -1,14 +1,16 @@
+import type { Category, ApiResponse } from '~/types';
+
 export const useCategories = () => {
   const { get, post, put, patch, del } = useApi();
 
-  const categories = ref<any[]>([]);
+  const categories = ref<Category[]>([]);
   const loading = ref(false);
 
   const fetchCategories = async () => {
     loading.value = true;
     try {
-      const data = await get('/categories');
-      categories.value = data.data || data;
+      const data = (await get('/categories')) as ApiResponse<Category[]>;
+      categories.value = data.data || (data as unknown as Category[]);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
     } finally {
@@ -16,10 +18,10 @@ export const useCategories = () => {
     }
   };
 
-  const createCategory = async (name: string, type: string) => {
+  const createCategory = async (name: string, type: string): Promise<Category> => {
     try {
-      const res = await post('/categories', { name, type });
-      const data = res.data || res;
+      const res = (await post('/categories', { name, type })) as ApiResponse<Category>;
+      const data = res.data || (res as unknown as Category);
       categories.value.push(data);
       return data;
     } catch (error) {
@@ -28,10 +30,10 @@ export const useCategories = () => {
     }
   };
 
-  const updateCategory = async (id: number, name: string) => {
+  const updateCategory = async (id: number, name: string): Promise<Category> => {
     try {
-      const res = await put(`/categories/${id}`, { name });
-      const data = res.data || res;
+      const res = (await put(`/categories/${id}`, { name })) as ApiResponse<Category>;
+      const data = res.data || (res as unknown as Category);
       const index = categories.value.findIndex((c) => c.id === id);
       if (index !== -1) categories.value[index] = data;
       return data;
@@ -41,10 +43,10 @@ export const useCategories = () => {
     }
   };
 
-  const toggleCategory = async (id: number) => {
+  const toggleCategory = async (id: number): Promise<Category> => {
     try {
-      const res = await patch(`/categories/${id}/toggle-status`, {});
-      const data = res.data || res;
+      const res = (await patch(`/categories/${id}/toggle-status`, {})) as ApiResponse<Category>;
+      const data = res.data || (res as unknown as Category);
       const index = categories.value.findIndex((c) => c.id === id);
       if (index !== -1) categories.value[index] = data;
       return data;

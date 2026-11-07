@@ -14,9 +14,7 @@
 
       <div v-if="loading" class="loading">Carregando...</div>
 
-      <div v-else-if="transactions.length === 0" class="empty">
-        Nenhuma transação encontrada
-      </div>
+      <div v-else-if="transactions.length === 0" class="empty">Nenhuma transação encontrada</div>
 
       <div v-else class="table-wrapper">
         <table class="transactions-table">
@@ -46,9 +44,7 @@
               </td>
               <td>{{ transaction.is_paid ? 'Pago' : 'Em aberto' }}</td>
               <td class="actions">
-                <button @click="editTransaction(transaction)" class="btn-edit">
-                  Editar
-                </button>
+                <button @click="editTransaction(transaction)" class="btn-edit">Editar</button>
                 <button
                   @click="deleteTransaction(transaction.id)"
                   :disabled="deletingId === transaction.id"
@@ -66,49 +62,55 @@
 </template>
 
 <script setup lang="ts">
+import type { Transaction } from '~/types';
+
 definePageMeta({
   middleware: 'auth',
-})
+});
 
-const { transactions, loading, fetchTransactions, deleteTransaction: deleteTransactionApi } = useTransactions()
+const {
+  transactions,
+  loading,
+  fetchTransactions,
+  deleteTransaction: deleteTransactionApi,
+} = useTransactions();
 
-const filterType = ref('')
-const deletingId = ref<number | null>(null)
+const filterType = ref('');
+const deletingId = ref<number | null>(null);
 
 const filteredTransactions = computed(() =>
-  transactions.value.filter(t =>
-    filterType.value === '' || t.type.includes(filterType.value.toLowerCase())
+  transactions.value.filter(
+    (t) => filterType.value === '' || t.type.includes(filterType.value.toLowerCase())
   )
-)
+);
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('pt-BR')
-}
+  return new Date(date).toLocaleDateString('pt-BR');
+};
 
 const formatAmount = (amount: number, type: string) => {
   const formatter = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  })
-  const prefix = type === 'income' ? '+ ' : '− '
-  return prefix + formatter.format(Math.abs(amount / 100))
-}
+  });
+  const prefix = type === 'income' ? '+ ' : '− ';
+  return prefix + formatter.format(Math.abs(amount / 100));
+};
 
-const editTransaction = (transaction: any) => {
-  console.log('Edit transaction:', transaction)
-}
+const editTransaction = (transaction: Transaction) => {
+  console.log('Edit transaction:', transaction);
+};
 
 const deleteTransaction = async (id: number) => {
-  deletingId.value = id
+  deletingId.value = id;
   try {
-    await deleteTransactionApi(id)
+    await deleteTransactionApi(id);
   } finally {
-    deletingId.value = null
+    deletingId.value = null;
   }
-}
+};
 
 onMounted(() => {
-  fetchTransactions()
-})
+  fetchTransactions();
+});
 </script>
-

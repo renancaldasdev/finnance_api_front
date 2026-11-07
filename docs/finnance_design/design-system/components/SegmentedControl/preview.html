@@ -1,27 +1,46 @@
 <!-- @dsCard group="Formulários" height=84 -->
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset="utf-8">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="../../tokens.css">
-<link rel="stylesheet" href="../bundle.css"><title>SegmentedControl</title></head>
-<body>
-<div class="fn-row">
-<div class="fn-seg" role="radiogroup" aria-label="Tipo" style="width: 400px">
-<button type="button" class="fn-seg-opt" role="radio" aria-checked="true" style="color: var(--expense)">Despesa</button>
-<button type="button" class="fn-seg-opt" role="radio" aria-checked="false">Receita</button>
-<button type="button" class="fn-seg-opt" role="radio" aria-checked="false">Transferência</button>
-</div>
-</div>
-<script>
-document.querySelectorAll('.fn-seg-opt').forEach(function (b) {
-  b.addEventListener('click', function () {
-    document.querySelectorAll('.fn-seg-opt').forEach(function (o) { o.setAttribute('aria-checked', 'false'); o.style.color = ''; });
-    b.setAttribute('aria-checked', 'true');
-    var c = { 'Despesa': 'var(--expense)', 'Receita': 'var(--income)' }[b.textContent];
-    if (c) b.style.color = c;
-  });
-});
-</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    />
+    <link rel="stylesheet" href="../../tokens.css" />
+    <link rel="stylesheet" href="../bundle.css" />
+    <title>SegmentedControl</title>
+  </head>
+  <body>
+    <div class="fn-row">
+      <div class="fn-seg" role="radiogroup" aria-label="Tipo" style="width: 400px">
+        <button
+          type="button"
+          class="fn-seg-opt"
+          role="radio"
+          aria-checked="true"
+          style="color: var(--expense)"
+        >
+          Despesa
+        </button>
+        <button type="button" class="fn-seg-opt" role="radio" aria-checked="false">Receita</button>
+        <button type="button" class="fn-seg-opt" role="radio" aria-checked="false">
+          Transferência
+        </button>
+      </div>
+    </div>
+    <script>
+      document.querySelectorAll('.fn-seg-opt').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('.fn-seg-opt').forEach(function (o) {
+            o.setAttribute('aria-checked', 'false');
+            o.style.color = '';
+          });
+          b.setAttribute('aria-checked', 'true');
+          var c = { Despesa: 'var(--expense)', Receita: 'var(--income)' }[b.textContent];
+          if (c) b.style.color = c;
+        });
+      });
+    </script>
+  </body>
 </html>
