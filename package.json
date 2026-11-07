@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "sonar": "sonar-scanner -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin",
-    "quality": "npm run lint && npm run format && npm run test:coverage",
+    "quality": "npm run lint && npm run format && npm run test",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
