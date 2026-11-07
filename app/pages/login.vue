@@ -211,7 +211,7 @@
         <button
           type="submit"
           :disabled="loading"
-          class="flex items-center justify-center min-h-[50px] rounded-[10px] bg-brand text-on-brand font-bold text-[15px] border-0 cursor-pointer transition-all hover:bg-brand-strong disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+          class="flex items-center justify-center min-h-12.5 rounded-[10px] bg-brand text-on-brand font-bold text-[15px] border-0 cursor-pointer transition-all hover:bg-brand-strong disabled:opacity-60 disabled:cursor-not-allowed mt-2"
         >
           {{ loading ? 'Criando conta...' : 'Criar Conta' }}
         </button>
