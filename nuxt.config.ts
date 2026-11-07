@@ -16,4 +16,10 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  routeRules: {
+    '/dashboard/**': { ssr: false },
+    '/transactions/**': { ssr: false },
+    '/accounts/**': { ssr: false },
+    '/categories/**': { ssr: false },
+  },
 });

@@ -32,7 +32,11 @@
       <div class="bg-sidebar text-white rounded-2xl p-5.5 flex flex-col gap-2.5">
         <span class="text-xs font-semibold text-sidebar-ink">Saldo em contas</span>
         <span class="text-3xl font-bold">{{ formatAmount(balanceTotal) }}</span>
-        <span class="text-xs text-sidebar-ink font-semibold">3 contas ativas</span>
+        <span class="text-xs text-sidebar-ink font-semibold"
+          >{{ accounts.length }} {{ accounts.length === 1 ? 'conta' : 'contas' }} ativa{{
+            accounts.length === 1 ? '' : 's'
+          }}</span
+        >
       </div>
       <div class="bg-surface-raised border border-line rounded-2xl p-5.5 flex flex-col gap-2.5">
         <span class="text-xs font-semibold text-ink-muted">Receitas do mês</span>
@@ -68,7 +72,7 @@
         >
           <div class="flex flex-col gap-1">
             <span class="text-sm font-semibold text-ink">{{ tx.description }}</span>
-            <span class="text-xs text-ink-muted">{{ formatDate(tx.created_at) }}</span>
+            <span class="text-xs text-ink-muted">{{ formatDate(tx.date) }}</span>
           </div>
           <span :class="['text-sm font-bold', tx.type === 'income' ? 'text-income' : 'text-expense']">
             {{ tx.type === 'income' ? '+' : '−' }} {{ formatAmount(tx.amount) }}
@@ -80,9 +84,8 @@
 
   <TransactionFormModal
     :is-open="showTransactionModal"
-    :mode="transactionMode"
     @close="showTransactionModal = false"
-    @submit="handleTransactionSubmit"
+    @saved="handleTransactionSaved"
   />
 </template>
 
@@ -93,9 +96,9 @@ definePageMeta({
 
 const { user } = useAuth();
 const { transactions, fetchTransactions } = useTransactions();
+const { accounts, fetchAccounts } = useAccounts();
 
 const showTransactionModal = ref(false);
-const transactionMode = ref<'income' | 'expense' | 'transfer'>('expense');
 
 const dateLabel = computed(() => {
   const now = new Date();
@@ -109,13 +112,11 @@ const formatDate = (date: string) => {
 };
 
 const formatAmount = (amount: number) => {
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount / 100);
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount);
 };
 
 const balanceTotal = computed(() => {
-  return transactions.value.reduce((sum, t) => {
-    return sum + (t.type === 'income' ? t.amount : -t.amount);
-  }, 0);
+  return accounts.value.reduce((sum, account) => sum + (account.balance || 0), 0);
 });
 
 const totalIncome = computed(() => {
@@ -135,20 +136,18 @@ const expenseCount = computed(() => transactions.value.filter((t) => t.type === 
 const pendingCount = computed(() => transactions.value.filter((t) => !t.is_paid).length);
 
 const openTransactionModal = () => {
-  transactionMode.value = 'expense';
   showTransactionModal.value = true;
 };
 
-const handleTransactionSubmit = async () => {
+const handleTransactionSaved = async () => {
   try {
-    showTransactionModal.value = false;
     await fetchTransactions();
   } catch (error) {
-    console.error('Erro ao criar transação', error);
+    console.error('Erro ao buscar transações:', error);
   }
 };
 
-onMounted(() => {
-  fetchTransactions();
+onMounted(async () => {
+  await Promise.all([fetchAccounts(), fetchTransactions()]);
 });
 </script>
