@@ -192,6 +192,36 @@ Expected Laravel responses:
 
 Adapters in composables handle both formats.
 
+## Finannce Design System & Styling
+
+**CRITICAL: Always use Tailwind CSS classes, never `<style scoped>` blocks.**
+
+All styling must follow the Finannce design system from `docs/finnance_design/design-system/`:
+
+- **Design tokens**: CSS variables defined in `app/app.css` (colors, spacing, typography, radius)
+  - Colors: `--brand`, `--ink`, `--surface-raised`, `--line`, `--danger`, `--warning-soft`, etc.
+  - Spacing: `--space-1` (4px) through `--space-10` (40px)
+  - Radius: `--radius-sm` (8px), `--radius-md` (10px), `--radius-lg` (16px), `--radius-xl`, `--radius-pill`
+  - Fonts: `--font-sans` (Manrope), weights 400–800
+
+- **Tailwind configuration**: Tokens are mapped to Tailwind utilities in `nuxt.config.ts` via `@theme`
+  - Use `bg-surface`, `text-brand`, `border-line`, `rounded-lg`, `p-6`, `gap-4`, etc.
+  - Never hardcode colors—use token-based utilities
+
+- **Layout rules from design guide**:
+  - Content padding: `32px clamp(16px, 3vw, 40px) 48px`
+  - Cards: `bg-surface-raised border border-line rounded-lg p-6`
+  - Sidebar: 240px base width, no `position: sticky` or `100vh`, uses `flex-wrap`
+  - Buttons: min-height `--control-height` (44px), use brand color with hover to brand-strong
+
+### API Values & Amount Formatting
+
+**Backend returns amounts in decimal R$ (not centavos):** e.g., `6320.15` = R$ 6.320,15
+
+- **Do NOT divide by 100** when displaying amounts—API already returns correct values
+- Format with `Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`
+- When form inputs collect amounts in R$, send them directly to API (no multiplication)
+
 ## Next Steps to Extend This Project
 
 - Add UI framework: `npm install @nuxt/ui` and configure in `nuxt.config.ts`

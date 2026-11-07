@@ -1,10 +1,17 @@
 <template>
   <AppShell>
     <div class="flex flex-col mb-4">
-      <div v-if="accounts.length > 0" class="text-sm text-ink-soft">
-        Saldo somado: <strong class="text-base text-ink font-bold">{{ formatAmount(totalBalance) }}</strong>
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div v-if="accounts.length > 0" class="text-sm text-ink-soft">
+            Saldo somado: <strong class="text-base text-ink font-bold">{{ formatAmount(totalBalance) }}</strong>
+          </div>
+          <h1 class="text-4xl font-bold text-ink m-0">Contas</h1>
+        </div>
+        <button @click="showForm = !showForm" class="fn-btn fn-btn-primary">
+          {{ showForm ? 'Cancelar' : '+ Nova Conta' }}
+        </button>
       </div>
-      <h1 class="text-4xl font-bold text-ink m-0">Contas</h1>
     </div>
 
     <div class="flex flex-wrap gap-2">
@@ -50,27 +57,41 @@
             </div>
 
             <div class="flex gap-2">
-              <button class="fn-btn">Ver extrato</button>
-              <button @click="editAccount(account)" class="fn-btn fn-btn-icon" title="Editar" aria-label="Editar conta">
-                ✎
-              </button>
               <button
-                @click="deleteAccount(account.id)"
-                :disabled="deletingId === account.id"
-                class="fn-btn fn-btn-icon fn-btn-danger"
-                title="Remover"
-                aria-label="Remover conta"
+                class="flex-1 border rounded-md bg-surface border-transparent cursor-pointer text-brand font-bold p-2"
               >
-                🗑
+                Ver extrato
               </button>
+              <div class="flex gap-2">
+                <button
+                  @click="editAccount(account)"
+                  class="border p-1 rounded w-10 border-line cursor-pointer"
+                  title="Editar"
+                  aria-label="Editar conta"
+                >
+                  ✎
+                </button>
+                <button
+                  @click="deleteAccount(account.id)"
+                  :disabled="deletingId === account.id"
+                  class="border p-1 rounded w-10 border-line text-red-500 font-bold cursor-pointer"
+                  title="Remover"
+                  aria-label="Remover conta"
+                >
+                  🗑
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <aside class="w-96 shrink-0">
+      <aside v-if="showForm" class="w-96 shrink-0">
         <div class="bg-surface-raised border border-line rounded-lg p-6 sticky top-8">
-          <h2 class="text-lg font-bold text-ink m-0 mb-2">{{ formData.id ? 'Editar Conta' : 'Nova conta' }}</h2>
+          <div class="flex justify-between items-center mb-2">
+            <h2 class="text-lg font-bold text-ink m-0">{{ formData.id ? 'Editar Conta' : 'Nova conta' }}</h2>
+            <button @click="closeForm" class="fn-btn-icon" title="Fechar" aria-label="Fechar formulário">✕</button>
+          </div>
 
           <form @submit.prevent="handleCreateAccount" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
@@ -137,6 +158,20 @@
         </div>
       </aside>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-surface-raised border border-line rounded-lg p-6 max-w-sm mx-4 shadow-modal">
+        <h3 class="text-lg font-bold text-ink m-0 mb-4">Remover Conta?</h3>
+        <p class="text-sm text-ink-soft mb-6">
+          Tem certeza que deseja remover esta conta? Esta ação não pode ser desfeita.
+        </p>
+        <div class="flex gap-3 justify-end">
+          <button @click="cancelDelete" class="fn-btn">Cancelar</button>
+          <button @click="confirmDelete" class="fn-btn fn-btn-danger">Remover</button>
+        </div>
+      </div>
+    </div>
   </AppShell>
 </template>
 
@@ -157,6 +192,9 @@ const {
 const creatingAccount = ref(false);
 const deletingId = ref<number | null>(null);
 const errorMessage = ref('');
+const showForm = ref(false);
+const showDeleteModal = ref(false);
+const deleteAccountId = ref<number | null>(null);
 
 const formData = reactive({
   id: null as number | null,
@@ -217,11 +255,21 @@ const handleCreateAccount = async () => {
     formData.type = '';
     formData.balance = 0;
     formData.id = null;
+    closeForm();
   } catch (error: any) {
     errorMessage.value = error?.message || 'Erro ao salvar conta. Tente novamente.';
   } finally {
     creatingAccount.value = false;
   }
+};
+
+const closeForm = () => {
+  showForm.value = false;
+  formData.id = null;
+  formData.name = '';
+  formData.type = '';
+  formData.balance = 0;
+  errorMessage.value = '';
 };
 
 const editAccount = (account: any) => {
@@ -233,17 +281,29 @@ const editAccount = (account: any) => {
   window.scrollTo(0, 0);
 };
 
-const deleteAccount = async (id: number) => {
-  if (!confirm('Tem certeza que deseja remover esta conta? Esta ação não pode ser desfeita.')) return;
-  deletingId.value = id;
+const deleteAccount = (id: number) => {
+  deleteAccountId.value = id;
+  showDeleteModal.value = true;
+};
+
+const confirmDelete = async () => {
+  if (!deleteAccountId.value) return;
+  deletingId.value = deleteAccountId.value;
   try {
-    await deleteAccountApi(id);
+    await deleteAccountApi(deleteAccountId.value);
     errorMessage.value = '';
+    showDeleteModal.value = false;
+    deleteAccountId.value = null;
   } catch (error: any) {
     errorMessage.value = error?.message || 'Erro ao remover conta. Tente novamente.';
   } finally {
     deletingId.value = null;
   }
+};
+
+const cancelDelete = () => {
+  showDeleteModal.value = false;
+  deleteAccountId.value = null;
 };
 
 onMounted(() => {
