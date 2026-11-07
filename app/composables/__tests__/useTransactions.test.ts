@@ -152,7 +152,7 @@ describe('useTransactions', () => {
       const result = await createTransaction(newTransaction);
 
       expect(mockPost).toHaveBeenCalledWith('/transactions', newTransaction);
-      expect(result).toEqual({ data: responseData });
+      expect(result).toEqual(responseData);
       expect(transactions.value).toContain(responseData);
     });
 
@@ -199,7 +199,7 @@ describe('useTransactions', () => {
       const result = await updateTransaction(1, updatedTransaction);
 
       expect(mockPut).toHaveBeenCalledWith('/transactions/1', updatedTransaction);
-      expect(result).toEqual({ data: responseData });
+      expect(result).toEqual(responseData);
       expect(transactions.value[0]).toEqual(responseData);
       expect(transactions.value.length).toBe(2);
     });

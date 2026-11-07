@@ -1,6 +1,45 @@
 @import 'tailwindcss';
 @import '../docs/finnance_design/design-system/components/bundle.css';
 
+/* Reusable component classes */
+@layer components {
+  .btn-primary {
+    @apply flex items-center justify-center min-h-12 rounded-lg bg-brand text-on-brand font-bold text-base border-0 cursor-pointer transition-all hover:bg-brand-strong disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .btn-tab {
+    @apply min-h-11 border-0 rounded-lg font-inherit text-sm font-bold cursor-pointer;
+  }
+
+  .btn-tab-active {
+    @apply btn-tab bg-surface-raised text-ink shadow-sm;
+  }
+
+  .btn-tab-inactive {
+    @apply btn-tab bg-transparent text-ink-soft hover:bg-surface;
+  }
+
+  .input-field {
+    @apply min-h-12 px-3 border border-line rounded-lg bg-surface-raised font-inherit text-base font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent;
+  }
+
+  .form-label {
+    @apply text-xs font-bold text-ink-muted;
+  }
+
+  .form-group {
+    @apply flex flex-col gap-2;
+  }
+
+  .error-box {
+    @apply bg-warning-soft text-danger p-3 rounded-lg text-sm border-l-4 border-danger;
+  }
+
+  .tab-group {
+    @apply grid grid-cols-2 gap-1.5 p-1 bg-surface rounded-lg;
+  }
+}
+
 @theme {
   --color-surface: #f4f5f2;
   --color-surface-raised: #ffffff;

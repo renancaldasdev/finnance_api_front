@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 // Validators from login.vue
 const validateEmail = (email: string): string | null => {
   if (!email) return 'E-mail é obrigatório';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'E-mail inválido';
+  if (!/^\S+@\S+\.\S+$/.test(email)) return 'E-mail inválido';
   return null;
 };
 

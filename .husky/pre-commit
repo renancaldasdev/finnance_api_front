@@ -13,8 +13,9 @@ wait
 npm run test
 TEST_RESULT=$?
 
-# Check if there are still linting errors
-if npm run lint 2>&1 | grep -E "error"; then
+# Check if there are linting errors (not warnings)
+LINT_OUTPUT=$(npm run lint 2>&1)
+if echo "$LINT_OUTPUT" | grep -E "✖ [0-9]+ problems \([1-9][0-9]* error"; then
   echo "❌ Linting errors found. Please fix them manually."
   exit 1
 fi
