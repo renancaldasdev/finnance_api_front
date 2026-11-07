@@ -48,20 +48,20 @@
       <form
         v-if="mode === 'login'"
         @submit.prevent="handleLogin"
-        class="w-full max-w-105 flex flex-col gap-[18px]"
+        class="w-full max-w-[420px] flex flex-col gap-[18px]"
       >
         <!-- Tabs -->
-        <div class="grid grid-cols-2 gap-1.5 p-1 bg-[#E6E9E7] rounded-lg">
+        <div class="grid grid-cols-2 gap-1.5 p-1 bg-surface rounded-lg">
           <button
             type="button"
-            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-white text-ink shadow-selected"
+            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-surface-raised text-ink shadow-sm"
           >
             Entrar
           </button>
           <button
             type="button"
             @click="mode = 'register'"
-            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-transparent text-[#3F4A45] hover:bg-[#E6E9E7]"
+            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-transparent text-ink-soft hover:bg-surface"
           >
             Criar conta
           </button>
@@ -76,7 +76,7 @@
         <!-- Error Message -->
         <div
           v-if="errorMessage"
-          class="bg-[#FDF0E3] text-danger p-3 rounded-lg text-sm border-l-4 border-danger"
+          class="bg-warning-soft text-danger p-3 rounded-lg text-sm border-l-4 border-danger"
         >
           {{ errorMessage }}
         </div>
@@ -90,7 +90,7 @@
             placeholder="voce@email.com"
             required
             autocomplete="email"
-            class="min-h-12 px-3.5 border border-[#D6DBD8] rounded-[10px] bg-white font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
+            class="min-h-12 px-3.5 border border-line rounded-[10px] bg-surface-raised font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
           />
         </label>
 
@@ -104,7 +104,7 @@
             required
             minlength="8"
             autocomplete="current-password"
-            class="min-h-12 px-3.5 border border-[#D6DBD8] rounded-[10px] bg-white font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
+            class="min-h-12 px-3.5 border border-line rounded-[10px] bg-surface-raised font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
           />
         </label>
 
@@ -125,17 +125,17 @@
         class="w-full max-w-[420px] flex flex-col gap-[18px]"
       >
         <!-- Tabs -->
-        <div class="grid grid-cols-2 gap-1.5 p-1 bg-[#E6E9E7] rounded-lg">
+        <div class="grid grid-cols-2 gap-1.5 p-1 bg-surface rounded-lg">
           <button
             type="button"
             @click="mode = 'login'"
-            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-transparent text-[#3F4A45] hover:bg-[#E6E9E7]"
+            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-transparent text-ink-soft hover:bg-surface"
           >
             Entrar
           </button>
           <button
             type="button"
-            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-white text-ink shadow-selected"
+            class="min-h-11 border-0 rounded-[9px] font-inherit text-sm font-bold cursor-pointer bg-surface-raised text-ink shadow-sm"
           >
             Criar conta
           </button>
@@ -150,7 +150,7 @@
         <!-- Error Message -->
         <div
           v-if="errorMessage"
-          class="bg-[#FDF0E3] text-danger p-3 rounded-lg text-sm border-l-4 border-danger"
+          class="bg-warning-soft text-danger p-3 rounded-lg text-sm border-l-4 border-danger"
         >
           {{ errorMessage }}
         </div>
@@ -164,7 +164,7 @@
             placeholder="Seu nome completo"
             required
             autocomplete="name"
-            class="min-h-12 px-3.5 border border-[#D6DBD8] rounded-[10px] bg-white font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
+            class="min-h-12 px-3.5 border border-line rounded-[10px] bg-surface-raised font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
           />
         </label>
 
@@ -177,7 +177,7 @@
             placeholder="voce@email.com"
             required
             autocomplete="email"
-            class="min-h-12 px-3.5 border border-[#D6DBD8] rounded-[10px] bg-white font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
+            class="min-h-12 px-3.5 border border-line rounded-[10px] bg-surface-raised font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
           />
         </label>
 
@@ -191,7 +191,7 @@
             required
             minlength="8"
             autocomplete="new-password"
-            class="min-h-12 px-3.5 border border-[#D6DBD8] rounded-[10px] bg-white font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
+            class="min-h-12 px-3.5 border border-line rounded-[10px] bg-surface-raised font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
           />
         </label>
 
@@ -205,7 +205,7 @@
             required
             minlength="8"
             autocomplete="new-password"
-            class="min-h-12 px-3.5 border border-[#D6DBD8] rounded-[10px] bg-white font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
+            class="min-h-12 px-3.5 border border-line rounded-[10px] bg-surface-raised font-inherit text-[15px] font-medium text-ink placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-soft focus:border-transparent"
           />
         </label>
 
