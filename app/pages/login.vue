@@ -243,20 +243,72 @@ const loading = ref(false);
 const errorMessage = ref('');
 const { login, register } = useAuth();
 
+// Form validation
+const validateEmail = (email: string): string | null => {
+  if (!email) return 'E-mail é obrigatório';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'E-mail inválido';
+  return null;
+};
+
+const validatePassword = (password: string, minLength = 8): string | null => {
+  if (!password) return 'Senha é obrigatória';
+  if (password.length < minLength) return `Senha deve ter pelo menos ${minLength} caracteres`;
+  return null;
+};
+
+const validateName = (name: string): string | null => {
+  if (!name) return 'Nome é obrigatório';
+  if (name.length < 3) return 'Nome deve ter pelo menos 3 caracteres';
+  return null;
+};
+
 const handleLogin = async () => {
+  // Validate before submitting
+  let error = validateEmail(loginForm.email);
+  if (error) {
+    errorMessage.value = error;
+    return;
+  }
+  error = validatePassword(loginForm.password);
+  if (error) {
+    errorMessage.value = error;
+    return;
+  }
+
   loading.value = true;
   errorMessage.value = '';
 
   try {
     await login(loginForm.email, loginForm.password);
-  } catch (error: unknown) {
-    errorMessage.value = getErrorMessage(error);
+  } catch (err: unknown) {
+    errorMessage.value = getErrorMessage(err);
   } finally {
     loading.value = false;
   }
 };
 
 const handleRegister = async () => {
+  // Validate before submitting
+  let error = validateName(registerForm.name);
+  if (error) {
+    errorMessage.value = error;
+    return;
+  }
+  error = validateEmail(registerForm.email);
+  if (error) {
+    errorMessage.value = error;
+    return;
+  }
+  error = validatePassword(registerForm.password);
+  if (error) {
+    errorMessage.value = error;
+    return;
+  }
+  if (registerForm.password !== registerForm.password_confirmation) {
+    errorMessage.value = 'As senhas não correspondem';
+    return;
+  }
+
   loading.value = true;
   errorMessage.value = '';
 

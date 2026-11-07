@@ -1,4 +1,45 @@
-import type { User, AuthResponse } from '~/types';
+import type { User } from '~/types';
+
+// Storage keys (centralized for easy maintenance)
+const AUTH_TOKEN_KEY = 'auth_token';
+const AUTH_USER_KEY = 'auth_user';
+
+const getStorageItem = (key: string): string | null => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    // Private browsing mode: fall back to sessionStorage
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  }
+};
+
+const setStorageItem = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    try {
+      sessionStorage.setItem(key, value);
+    } catch (error) {
+      console.error('Storage unavailable:', error);
+    }
+  }
+};
+
+const removeStorageItem = (key: string) => {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    try {
+      sessionStorage.removeItem(key);
+    } catch {
+      // Storage not available
+    }
+  }
+};
 
 export const useAuth = () => {
   const { post, get, token } = useApi();
@@ -8,30 +49,33 @@ export const useAuth = () => {
   const isAuthenticated = computed(() => !!token.value && !!user.value);
 
   const initToken = () => {
-    const stored = localStorage.getItem('auth_token');
+    const stored = getStorageItem(AUTH_TOKEN_KEY);
     if (stored) {
       token.value = stored;
     }
 
-    const storedUser = localStorage.getItem('auth_user');
+    const storedUser = getStorageItem(AUTH_USER_KEY);
     if (storedUser) {
       try {
         user.value = JSON.parse(storedUser);
       } catch (error) {
         console.error('Erro ao restaurar usuário:', error);
+        removeStorageItem(AUTH_USER_KEY);
       }
     }
   };
 
   const login = async (email: string, password: string): Promise<User> => {
     try {
-      const res = (await post('/login', { email, password })) as AuthResponse;
-      const data = res.data || (res as unknown as User);
+      const res = await post('/login', { email, password });
+      // Handle both wrapped (data) and unwrapped response formats
+      const data: User = (res as any).data || res;
       token.value = data.token || '';
       user.value = data;
-      localStorage.setItem('auth_token', data.token || '');
-      localStorage.setItem('auth_user', JSON.stringify(data));
-      await router.push('/dashboard');
+      setStorageItem(AUTH_TOKEN_KEY, data.token || '');
+      setStorageItem(AUTH_USER_KEY, JSON.stringify(data));
+      // Navigation handled by router, don't await to avoid blocking
+      router.push('/dashboard');
       return data;
     } catch (error) {
       throw new Error('Login failed', { cause: error });
@@ -45,18 +89,20 @@ export const useAuth = () => {
     passwordConfirmation: string
   ): Promise<User> => {
     try {
-      const res = (await post('/register', {
+      const res = await post('/register', {
         name,
         email,
         password,
         password_confirmation: passwordConfirmation,
-      })) as AuthResponse;
-      const data = res.data || (res as unknown as User);
+      });
+      // Handle both wrapped (data) and unwrapped response formats
+      const data: User = (res as any).data || res;
       token.value = data.token || '';
       user.value = data;
-      localStorage.setItem('auth_token', data.token || '');
-      localStorage.setItem('auth_user', JSON.stringify(data));
-      await router.push('/dashboard');
+      setStorageItem(AUTH_TOKEN_KEY, data.token || '');
+      setStorageItem(AUTH_USER_KEY, JSON.stringify(data));
+      // Navigation handled by router, don't await to avoid blocking
+      router.push('/dashboard');
       return data;
     } catch (error) {
       throw new Error('Registration failed', { cause: error });
@@ -64,29 +110,43 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    try {
-      const { post } = useApi();
-      await post('/logout', {});
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      token.value = null;
-      user.value = null;
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('auth_user');
-      await router.push('/');
+    // Retry logout once if it fails (server might be temporarily unavailable)
+    let retries = 0;
+    const maxRetries = 1;
+    while (retries <= maxRetries) {
+      try {
+        const { post } = useApi();
+        await post('/logout', {});
+        break;
+      } catch (error) {
+        retries++;
+        if (retries > maxRetries) {
+          console.error('Logout failed after retries:', error);
+          break;
+        }
+        // Wait before retrying
+        await new Promise((r) => setTimeout(r, 100));
+      }
     }
+    // Always clear local state, even if server logout fails
+    token.value = null;
+    user.value = null;
+    removeStorageItem(AUTH_TOKEN_KEY);
+    removeStorageItem(AUTH_USER_KEY);
+    // Navigation handled by router
+    router.push('/');
   };
 
   const getMe = async (): Promise<User> => {
     try {
-      const res = (await get('/me')) as AuthResponse;
-      const data = res.data || (res as unknown as User);
+      const res = await get('/me');
+      // Handle both wrapped (data) and unwrapped response formats
+      const data: User = (res as any).data || res;
       user.value = data;
       return data;
     } catch (error) {
       token.value = null;
-      localStorage.removeItem('auth_token');
+      removeStorageItem(AUTH_TOKEN_KEY);
       throw error;
     }
   };

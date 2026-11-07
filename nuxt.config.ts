@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   routeRules: {
+    // SSR disabled for authenticated routes: client-side auth check required before rendering
     '/dashboard/**': { ssr: false },
     '/transactions/**': { ssr: false },
     '/accounts/**': { ssr: false },
