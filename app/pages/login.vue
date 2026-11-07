@@ -48,7 +48,7 @@
       <form
         v-if="mode === 'login'"
         @submit.prevent="handleLogin"
-        class="w-full max-w-[420px] flex flex-col gap-[18px]"
+        class="w-full max-w-105 flex flex-col gap-[18px]"
       >
         <!-- Tabs -->
         <div class="grid grid-cols-2 gap-1.5 p-1 bg-[#E6E9E7] rounded-lg">
